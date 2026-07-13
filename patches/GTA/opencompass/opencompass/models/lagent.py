@@ -62,6 +62,79 @@ def _patch_lagent_action_executor_split():
     _ActionExecutor.__call__ = _safe_call
     setattr(_ActionExecutor, '_opencompass_safe_split_patched', True)
 
+
+def _patch_lagent_json_parser_trailing():
+    """Make lagent's JsonParser tolerate a hallucinated observation appended after
+    a valid JSON action.
+
+    Weak ReAct LLMs (e.g. Qwen2.5-7B on GTA's locate->describe tasks) routinely
+    emit a well-formed action and then keep generating a fake tool result, e.g.::
+
+        {"image": "...", "text": "dog", "attribute": "breed"}
+        ```
+        Response: The dog in the middle is a Golden Retriever.
+
+    Upstream `JsonParser.parse_inputs` json.loads the whole string, fails, and
+    raises ParseError -> the ENTIRE tool call is dropped (ARGS_ERROR) and the agent
+    falls back to its own hallucination. On the composition subset this made clean
+    tool executions 0/40. We recover the leading balanced {...} object instead.
+    Applied symmetrically to every condition, so comparisons stay fair.
+    """
+    if lagent is None:
+        return
+    try:
+        from lagent.actions.parser import JsonParser, ParseError
+    except Exception:
+        return
+    if getattr(JsonParser, '_opencompass_trailing_json_patched', False):
+        return
+
+    def _first_json(text):
+        start = text.find('{')
+        if start < 0:
+            return None
+        depth = 0
+        in_str = False
+        esc = False
+        for i in range(start, len(text)):
+            ch = text[i]
+            if in_str:
+                if esc:
+                    esc = False
+                elif ch == '\\':
+                    esc = True
+                elif ch == '"':
+                    in_str = False
+            elif ch == '"':
+                in_str = True
+            elif ch == '{':
+                depth += 1
+            elif ch == '}':
+                depth -= 1
+                if depth == 0:
+                    try:
+                        obj = json.loads(text[start:i + 1])
+                    except json.JSONDecodeError:
+                        return None
+                    return obj if isinstance(obj, dict) else None
+        return None
+
+    _orig_parse_inputs = JsonParser.parse_inputs
+
+    def _safe_parse_inputs(self, inputs, name='run'):
+        try:
+            return _orig_parse_inputs(self, inputs, name)
+        except ParseError:
+            if isinstance(inputs, str):
+                recovered = _first_json(inputs)
+                if recovered is not None:
+                    return _orig_parse_inputs(self, recovered, name)
+            raise
+
+    JsonParser.parse_inputs = _safe_parse_inputs
+    setattr(JsonParser, '_opencompass_trailing_json_patched', True)
+
+
 class DummyTool(agentlego.tools.BaseTool):
 
     def __init__(self, toolmeta):
@@ -148,6 +221,7 @@ class LagentAgent:
                  protocol=None,
                  **kwargs):
         _patch_lagent_action_executor_split()
+        _patch_lagent_json_parser_trailing()
         llm = model_adapter(REGISTRY.build(llm))
         agent_cfg = {'type': agent_type, 'llm': llm, **kwargs}
 
@@ -234,6 +308,12 @@ class LagentAgent:
             for _name in filter(None, _os.getenv('GTA_EXTRA_TOOLS', '').split(',')):
                 if _name in self.tools and self.tools[_name] not in tools:
                     tools.append(self.tools[_name])
+            # GTA_HIDE_TOOLS: drop tools from the agent's MENU only (e.g. hide the
+            # primitives a composition macro replaces) while they stay forwardable
+            # through the proxy for the macro's internal calls. Menu-level only.
+            _hide = set(filter(None, _os.getenv('GTA_HIDE_TOOLS', '').split(',')))
+            if _hide:
+                tools = [t for t in tools if getattr(t, 'name', None) not in _hide]
             files = [item for item in resources if item['type'] == 'file']
 
         action_executor = lagent.ActionExecutor(actions=tools)
@@ -274,6 +354,10 @@ class LagentAgent:
             for _name in filter(None, _os.getenv('GTA_EXTRA_TOOLS', '').split(',')):
                 if _name in self.tools:
                     tools.setdefault(_name, self.tools[_name])
+            # GTA_HIDE_TOOLS: menu-level hide (see next_step); primitives stay
+            # forwardable for a macro's internal proxy calls.
+            for _name in filter(None, _os.getenv('GTA_HIDE_TOOLS', '').split(',')):
+                tools.pop(_name, None)
             files = [item for item in resources if item['type'] == 'file']
 
         action_executor = self.agent._action_executor

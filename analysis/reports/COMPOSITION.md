@@ -54,13 +54,74 @@ pre-packaged "composed" output — moves it the wrong way.** Composition as *eag
 fusion* is anti-mask and therefore negative for the same reason the mask axis is
 positive.
 
-## Status: closed (negative), one live rescue path
+## Status: PerceiveAll closed negative — but the axis is NOT dead (see RegionRead)
 
-The only version that could plausibly turn positive is a **lazy/conditional macro**
-— `PerceiveAll(image, want='desc'|'ocr'|'both')` that returns only the requested
-branch. But that is just parameterized orchestration; it abandons the "fuse two
-tools into one" claim the C-axis was meant to test. Recorded as the open lever, not
-pursued. C-axis is archived negative.
+PerceiveAll fails because it is *parallel* fusion (concatenate two independent
+perceptions). The next macro, RegionRead, fuses along a *data dependency* and wins.
 
 Raw runs: `results/compose_{baseline,macro}_s{1,2,3}/`. IDs: `compose_42ids.json`.
 Selector/mask config: `results/inject_opt/selectors_compose.json`.
+
+---
+
+# RegionRead — sequential-dependency composition is POSITIVE (+28.8 AnsAcc)
+
+**Macro.** `RegionRead(image, text, attribute)` = `TextToBbox → RegionAttributeDescription`
+fused into one call: locate the object, hide the bbox coordinates, VQA the region for
+the asked attribute, return only the answer. Three design principles, all the inverse
+of PerceiveAll: (1) fuse along the dependency (A's bbox feeds B), not in parallel;
+(2) hide the error-prone glue (the LLM otherwise parses `(x1,y1,x2,y2), score N` and
+threads it back — and botches it); (3) shrink the output (one attribute, no coords) so
+it is pro-mask. Code: `experiments/macro_tools.py::RegionRead`.
+
+**Setup.** The 8 GTA tasks whose gt uses this chain (ids 9,10,11,40,84,164,165,166;
+`regionread_ids.json`). Qwen2.5-7B, 5 seeds. baseline = agent chains the two
+primitives itself; composed = primitives hidden from the menu (`GTA_HIDE_TOOLS`),
+RegionRead forced (`GTA_EXTRA_TOOLS`). Driver `experiments/regionread_exp.sh`,
+config `selectors_regionread.json`. Runs on a second stack (proxy 16282 → tool
+server 16182 with RegionRead) so the macro's internal calls still forward while the
+menu hides the primitives.
+
+**REQUIRED harness fix (else the result is an artifact).** First pass showed composed
++10 but with **0/40 clean tool executions in either arm** — a mirage. Cause: the ReAct
+LLM appends a hallucinated ``` ```\nResponse: ... ``` after a valid JSON action, and
+lagent's `JsonParser` json.loads the whole string, fails, and drops the entire tool
+call (ARGS_ERROR). Fixed by monkey-patching `JsonParser.parse_inputs` to recover the
+leading balanced `{...}` object (`models/lagent.py::_patch_lagent_json_parser_trailing`,
+applied symmetrically to both arms). This lifted clean tool execution from ~5% to a
+usable rate and made the measurement real. NB: this bug also depressed tool fidelity
+in the earlier mask / PerceiveAll runs (~21% clean on full-229) — those conclusions
+were drawn under low fidelity and are worth re-checking.
+
+**Result (patched, clean).**
+
+| | baseline (2 primitives) | composed (RegionRead) |
+|---|---|---|
+| clean tool executions | **2/40 = 5%** | **22/40 = 55%** (11×) |
+| AnsAcc (5-seed mean ± sd) | 34.2 ± 16.2 | **63.0 ± 8.2** |
+| per-seed Δ | — | +55.5 / +30.1 / +25.7 / +32.2 / +0.4 (**5/5 win**) |
+
+**Mechanism — composition removes an orchestration barrier the weak model can't
+cross.** The 7B almost never cleanly invokes the 2-step locate→describe chain (5%):
+the bbox-threading is hard enough that it gives up and hallucinates an answer. The
+1-step fused tool it *will* invoke (55%), and being tool-grounded it scores +28.8 with
+*lower* variance (±8.2 vs ±16.2 — no hallucination lottery). The win is not "one fewer
+call"; it is "the fused unit is below the invocation barrier, the chain is above it."
+
+**When composition helps (the rule this axis establishes).** Fuse along a data
+dependency, hide the error-prone intermediate, shrink the output → wins (RegionRead).
+Concatenate independent outputs in parallel → loses, because it is anti-mask
+(PerceiveAll). Composition buys performance by removing orchestration the model can't
+do, not by bundling perception it already gets.
+
+**Honest bounds.** n=8, so AnsAcc is coarse (each task 12.5%); the robust evidence is
+the deterministic tool-execution rate (2/40 vs 22/40) plus 5/5 sign consistency, not
+the noisy means. Benchmark-wide reach is capped by the chain's rarity (8/229 = 3.5%).
+Still top1 (mechanical) — the 3 multi-object tasks (9/40/84) that need spatial
+selection ("middle/right") are a known soft spot; RegionRead executes but can pick the
+wrong box.
+
+Raw runs: `results/rr_{baseline,composed}_s{1..5}/`. Macro/patches:
+`experiments/macro_tools.py`, `patches/GTA/.../models/lagent.py`,
+`patches/GTA/.../datasets/gta_bench.py` (GTA_TASK_IDS). Config:
+`selectors_regionread.json`.

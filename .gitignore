@@ -1,5 +1,10 @@
-GTA/                 # vendored open-compass/GTA clone (465MB); patches/ has our diffs
-results              # symlink -> /datasets/omni_pretraining/gta2/results
+# GTA/ is intentionally TRACKED: a vendored open-compass/GTA clone with our
+# patches applied in place so the repo clones-and-runs. patches/ documents the
+# isolated diffs. Do not add GTA/ here (would ignore our in-place edits).
+
+# results/ is a symlink into /datasets; heavy outputs live off-repo.
+results
+
 __pycache__/
 *.pyc
 *.log

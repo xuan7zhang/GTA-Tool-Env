@@ -76,7 +76,14 @@ class GTABenchDataset(BaseDataset):
                 'resources': json.dumps(tools + files),
                 'gt_answer': json.dumps(gt_answer)
             }
+            sample['task_idx'] = idx
             data_list.append(sample)
+        # GTA_TASK_IDS=9,10,11: keep only these task ids (dataset.json keys), used
+        # to run a specific subset cheaply (e.g. the composition-relevant tasks).
+        _ids = os.getenv('GTA_TASK_IDS')
+        if _ids:
+            keep = {int(x) for x in _ids.split(',') if x.strip() != ''}
+            data_list = [s for s in data_list if s['task_idx'] in keep]
         # GTA_TASK_SUBSET=N: keep only the first N tasks (deterministic order),
         # used to make per-tool corruption probes cheap. Full 229 otherwise.
         _sub = os.getenv('GTA_TASK_SUBSET')

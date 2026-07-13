@@ -1,0 +1,43 @@
+{
+ "baseline_prim": {
+  "keep": [
+   "Calculator",
+   "GoogleSearch",
+   "Plot",
+   "Solver",
+   "OCR",
+   "ImageDescription",
+   "TextToBbox",
+   "CountGivenObject",
+   "MathOCR",
+   "DrawBox",
+   "AddText",
+   "TextToImage",
+   "ImageStylization",
+   "RegionAttributeDescription"
+  ],
+  "extra": "",
+  "hide": ""
+ },
+ "composed_rr": {
+  "keep": [
+   "Calculator",
+   "GoogleSearch",
+   "Plot",
+   "Solver",
+   "OCR",
+   "ImageDescription",
+   "TextToBbox",
+   "CountGivenObject",
+   "MathOCR",
+   "DrawBox",
+   "AddText",
+   "TextToImage",
+   "ImageStylization",
+   "RegionAttributeDescription",
+   "RegionRead"
+  ],
+  "extra": "RegionRead",
+  "hide": "TextToBbox,RegionAttributeDescription"
+ }
+}
