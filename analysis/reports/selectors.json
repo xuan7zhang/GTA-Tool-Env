@@ -1,0 +1,225 @@
+{
+ "keep_all": {
+  "keep": [
+   "Calculator",
+   "OCR",
+   "CountGivenObject",
+   "ImageDescription",
+   "GoogleSearch",
+   "RegionAttributeDescription",
+   "TextToBbox",
+   "Plot",
+   "MathOCR",
+   "Solver",
+   "DrawBox",
+   "AddText",
+   "TextToImage",
+   "ImageStylization",
+   "DirectImageQA",
+   "InstantAnswer",
+   "PreciseOCR",
+   "SmartCount",
+   "ExpertMath",
+   "VerifiedFact",
+   "ImageDetailPro",
+   "QuickBBox"
+  ],
+  "pruned": []
+ },
+ "oracle": {
+  "keep": [
+   "Calculator",
+   "OCR",
+   "CountGivenObject",
+   "ImageDescription",
+   "GoogleSearch",
+   "RegionAttributeDescription",
+   "TextToBbox",
+   "Plot",
+   "MathOCR",
+   "Solver",
+   "DrawBox",
+   "AddText",
+   "TextToImage",
+   "ImageStylization"
+  ],
+  "pruned": [
+   "DirectImageQA",
+   "InstantAnswer",
+   "PreciseOCR",
+   "SmartCount",
+   "ExpertMath",
+   "VerifiedFact",
+   "ImageDetailPro",
+   "QuickBBox"
+  ]
+ },
+ "random": {
+  "keep": [
+   "Calculator",
+   "OCR",
+   "GoogleSearch",
+   "RegionAttributeDescription",
+   "Plot",
+   "Solver",
+   "DrawBox",
+   "TextToImage",
+   "DirectImageQA",
+   "InstantAnswer",
+   "PreciseOCR",
+   "SmartCount",
+   "ExpertMath",
+   "VerifiedFact"
+  ],
+  "pruned": [
+   "CountGivenObject",
+   "ImageDescription",
+   "TextToBbox",
+   "MathOCR",
+   "AddText",
+   "ImageStylization",
+   "ImageDetailPro",
+   "QuickBBox"
+  ]
+ },
+ "call_frequency": {
+  "keep": [
+   "Calculator",
+   "OCR",
+   "CountGivenObject",
+   "ImageDescription",
+   "GoogleSearch",
+   "RegionAttributeDescription",
+   "TextToBbox",
+   "Plot",
+   "MathOCR",
+   "Solver",
+   "AddText",
+   "ImageStylization",
+   "SmartCount",
+   "ExpertMath"
+  ],
+  "pruned": [
+   "DrawBox",
+   "TextToImage",
+   "DirectImageQA",
+   "InstantAnswer",
+   "PreciseOCR",
+   "VerifiedFact",
+   "ImageDetailPro",
+   "QuickBBox"
+  ]
+ },
+ "error_rate": {
+  "keep": [
+   "Calculator",
+   "CountGivenObject",
+   "ImageDescription",
+   "TextToBbox",
+   "Solver",
+   "ImageStylization",
+   "DirectImageQA",
+   "InstantAnswer",
+   "PreciseOCR",
+   "SmartCount",
+   "ExpertMath",
+   "VerifiedFact",
+   "ImageDetailPro",
+   "QuickBBox"
+  ],
+  "pruned": [
+   "OCR",
+   "GoogleSearch",
+   "RegionAttributeDescription",
+   "Plot",
+   "MathOCR",
+   "DrawBox",
+   "AddText",
+   "TextToImage"
+  ]
+ },
+ "ours_corruption": {
+  "keep": [
+   "GoogleSearch",
+   "Plot",
+   "DrawBox",
+   "AddText",
+   "TextToImage",
+   "ImageStylization",
+   "DirectImageQA",
+   "InstantAnswer",
+   "PreciseOCR",
+   "SmartCount",
+   "ExpertMath",
+   "VerifiedFact",
+   "ImageDetailPro",
+   "QuickBBox"
+  ],
+  "pruned": [
+   "Calculator",
+   "OCR",
+   "CountGivenObject",
+   "ImageDescription",
+   "RegionAttributeDescription",
+   "TextToBbox",
+   "MathOCR",
+   "Solver"
+  ]
+ },
+ "ours_echo": {
+  "keep": [
+   "OCR",
+   "CountGivenObject",
+   "ImageDescription",
+   "GoogleSearch",
+   "RegionAttributeDescription",
+   "TextToBbox",
+   "Plot",
+   "MathOCR",
+   "Solver",
+   "ImageStylization",
+   "DirectImageQA",
+   "InstantAnswer",
+   "SmartCount",
+   "ExpertMath"
+  ],
+  "pruned": [
+   "ImageDetailPro",
+   "AddText",
+   "TextToImage",
+   "QuickBBox",
+   "DrawBox",
+   "VerifiedFact",
+   "Calculator",
+   "PreciseOCR"
+  ]
+ },
+ "ours_grounding": {
+  "keep": [
+   "Calculator",
+   "OCR",
+   "CountGivenObject",
+   "ImageDescription",
+   "GoogleSearch",
+   "RegionAttributeDescription",
+   "TextToBbox",
+   "Plot",
+   "MathOCR",
+   "Solver",
+   "DrawBox",
+   "AddText",
+   "TextToImage",
+   "ImageStylization"
+  ],
+  "pruned": [
+   "DirectImageQA",
+   "InstantAnswer",
+   "PreciseOCR",
+   "SmartCount",
+   "ExpertMath",
+   "VerifiedFact",
+   "ImageDetailPro",
+   "QuickBBox"
+  ]
+ }
+}

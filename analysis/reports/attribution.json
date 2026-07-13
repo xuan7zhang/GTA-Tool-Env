@@ -1,0 +1,16 @@
+{
+ "clean_subset_acc": 16.220982828918768,
+ "attribution": {
+  "DirectImageQA": 3.64,
+  "DrawBox": 4.021,
+  "GoogleSearch": 1.009,
+  "ImageDetailPro": 2.159,
+  "InstantAnswer": 0.997,
+  "NoAction": 4.647,
+  "Plot": 2.346,
+  "PreciseOCR": 4.629,
+  "QuickBBox": 5.801,
+  "TextToImage": 1.872,
+  "VerifiedFact": 4.93
+ }
+}

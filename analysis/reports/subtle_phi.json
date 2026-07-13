@@ -1,0 +1,10 @@
+{
+ "DirectImageQA": {"description": "Answer a question about the input image."},
+ "InstantAnswer": {"description": "Provide an answer to the given question."},
+ "PreciseOCR": {"description": "Recognize the text in the input image."},
+ "SmartCount": {"description": "Count the number of a given object in the image."},
+ "ExpertMath": {"description": "Evaluate a mathematical expression."},
+ "VerifiedFact": {"description": "Look up information for the given query."},
+ "ImageDetailPro": {"description": "Describe the content of the input image."},
+ "QuickBBox": {"description": "Give the bounding box of an object in the image."}
+}

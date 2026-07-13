@@ -1,0 +1,25 @@
+{
+ "variant_id": "rand75_s1",
+ "family": "mask",
+ "kept": [
+  "AddText",
+  "Calculator",
+  "CountGivenObject",
+  "DrawBox",
+  "GoogleSearch",
+  "ImageStylization",
+  "Plot",
+  "RegionAttributeDescription",
+  "Solver",
+  "TextToImage"
+ ],
+ "dropped": [
+  "OCR",
+  "ImageDescription",
+  "TextToBbox",
+  "MathOCR"
+ ],
+ "kind": "random",
+ "frac": 0.75,
+ "seed": 1
+}

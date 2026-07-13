@@ -1,0 +1,25 @@
+{
+ "variant_id": "loo_DrawBox",
+ "family": "mask",
+ "kept": [
+  "Calculator",
+  "OCR",
+  "CountGivenObject",
+  "ImageDescription",
+  "GoogleSearch",
+  "RegionAttributeDescription",
+  "TextToBbox",
+  "Plot",
+  "MathOCR",
+  "Solver",
+  "AddText",
+  "TextToImage",
+  "ImageStylization"
+ ],
+ "dropped": [
+  "DrawBox"
+ ],
+ "kind": "loo",
+ "left_out": "DrawBox",
+ "seed": null
+}

@@ -1,0 +1,22 @@
+{
+ "variant_id": "macros1_d5_s0",
+ "family": "compose",
+ "macros": true,
+ "distractors": [
+  "ReadabilityScorer",
+  "TextSentimentAnalyzer",
+  "ImageHashGenerator",
+  "ImageMetadataAnalyzer",
+  "ColorPaletteExtractor"
+ ],
+ "extra_tool_names": [
+  "LocateThenDescribe",
+  "OCRThenSearch",
+  "ReadabilityScorer",
+  "TextSentimentAnalyzer",
+  "ImageHashGenerator",
+  "ImageMetadataAnalyzer",
+  "ColorPaletteExtractor"
+ ],
+ "seed": 0
+}

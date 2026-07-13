@@ -1,0 +1,47 @@
+{
+ "ours_grounding_plus": {
+  "keep": [
+   "Calculator",
+   "OCR",
+   "CountGivenObject",
+   "ImageDescription",
+   "GoogleSearch",
+   "RegionAttributeDescription",
+   "TextToBbox",
+   "MathOCR",
+   "Solver"
+  ],
+  "pruned": [
+   "Plot",
+   "DrawBox",
+   "AddText",
+   "TextToImage",
+   "ImageStylization",
+   "DirectImageQA",
+   "InstantAnswer",
+   "PreciseOCR",
+   "SmartCount",
+   "ExpertMath",
+   "VerifiedFact",
+   "ImageDetailPro",
+   "QuickBBox"
+  ]
+ },
+ "from_grounding": [
+  "DirectImageQA",
+  "InstantAnswer",
+  "PreciseOCR",
+  "SmartCount",
+  "ExpertMath",
+  "VerifiedFact",
+  "ImageDetailPro",
+  "QuickBBox"
+ ],
+ "image_output": [
+  "Plot",
+  "DrawBox",
+  "AddText",
+  "TextToImage",
+  "ImageStylization"
+ ]
+}

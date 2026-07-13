@@ -1,0 +1,77 @@
+datasets = [
+    [
+        dict(
+            abbr='gta_bench_step',
+            eval_cfg=dict(
+                evaluator=dict(
+                    mode='every_with_gt',
+                    type='opencompass.datasets.gta_bench.GTABenchEvaluator')),
+            infer_cfg=dict(
+                inferencer=dict(
+                    infer_mode='every_with_gt',
+                    type='opencompass.openicl.icl_inferencer.AgentInferencer'),
+                prompt_template=dict(
+                    template='{questions}',
+                    type=
+                    'opencompass.openicl.icl_prompt_template.PromptTemplate'),
+                retriever=dict(
+                    type='opencompass.openicl.icl_retriever.ZeroRetriever')),
+            path='data/gta_dataset',
+            reader_cfg=dict(
+                input_columns=[
+                    'dialogs',
+                    'resources',
+                ],
+                output_column='gt_answer',
+                test_split='test',
+                train_split='test'),
+            type='opencompass.datasets.gta_bench.GTABenchDataset'),
+        dict(
+            abbr='gta_bench_end',
+            eval_cfg=dict(
+                evaluator=dict(
+                    mode='every',
+                    type='opencompass.datasets.gta_bench.GTABenchEvaluator')),
+            infer_cfg=dict(
+                inferencer=dict(
+                    infer_mode='every',
+                    type='opencompass.openicl.icl_inferencer.AgentInferencer'),
+                prompt_template=dict(
+                    template='{questions}',
+                    type=
+                    'opencompass.openicl.icl_prompt_template.PromptTemplate'),
+                retriever=dict(
+                    type='opencompass.openicl.icl_retriever.ZeroRetriever')),
+            path='data/gta_dataset',
+            reader_cfg=dict(
+                input_columns=[
+                    'dialogs',
+                    'resources',
+                ],
+                output_column='gt_answer',
+                test_split='test',
+                train_split='test'),
+            type='opencompass.datasets.gta_bench.GTABenchDataset'),
+    ],
+]
+eval = dict(runner=dict(task=dict()))
+models = [
+    dict(
+        abbr='qwen2.5-7b-instruct',
+        agent_type='lagent.agents.ReAct',
+        batch_size=8,
+        llm=dict(
+            key='EMPTY',
+            max_seq_len=32768,
+            openai_api_base='http://127.0.0.1:12580/v1/chat/completions',
+            path='qwen2.5-7b-instruct',
+            query_per_second=2,
+            retry=5,
+            stop='<|im_end|>',
+            type='opencompass.models.OpenAI'),
+        max_turn=10,
+        tool_meta='data/gta_dataset/toolmeta.json',
+        tool_server='http://127.0.0.1:16281',
+        type='opencompass.models.lagent.LagentAgent'),
+]
+work_dir = '/datasets/omni_pretraining/gta2/results/baseline_smoketest/20260704_234649'

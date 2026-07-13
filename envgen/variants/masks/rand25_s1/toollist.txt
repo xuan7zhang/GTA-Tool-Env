@@ -1,0 +1,4 @@
+AddText
+DrawBox
+Solver
+TextToBbox

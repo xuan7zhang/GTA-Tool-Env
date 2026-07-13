@@ -1,0 +1,7 @@
+AddText
+Calculator
+CountGivenObject
+DrawBox
+ImageDescription
+ImageStylization
+TextToImage

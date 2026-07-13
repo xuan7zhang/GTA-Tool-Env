@@ -1,0 +1,54 @@
+{
+ "ours_grounding": {
+  "keep": [
+   "Calculator",
+   "OCR",
+   "CountGivenObject",
+   "ImageDescription",
+   "GoogleSearch",
+   "RegionAttributeDescription",
+   "TextToBbox",
+   "Plot",
+   "MathOCR",
+   "Solver",
+   "DrawBox",
+   "AddText",
+   "TextToImage",
+   "ImageStylization"
+  ],
+  "pruned": [
+   "DirectImageQA",
+   "InstantAnswer",
+   "PreciseOCR",
+   "SmartCount",
+   "ExpertMath",
+   "VerifiedFact",
+   "ImageDetailPro",
+   "QuickBBox"
+  ]
+ },
+ "status": {
+  "Calculator": "grounded",
+  "OCR": "grounded",
+  "CountGivenObject": "untestable",
+  "ImageDescription": "grounded",
+  "GoogleSearch": "errored",
+  "RegionAttributeDescription": "untestable",
+  "TextToBbox": "errored",
+  "Plot": "errored",
+  "MathOCR": "errored",
+  "Solver": "errored",
+  "DrawBox": "untestable",
+  "AddText": "errored",
+  "TextToImage": "grounded",
+  "ImageStylization": "grounded",
+  "DirectImageQA": "INVARIANT",
+  "InstantAnswer": "INVARIANT",
+  "PreciseOCR": "INVARIANT",
+  "SmartCount": "INVARIANT",
+  "ExpertMath": "INVARIANT",
+  "VerifiedFact": "INVARIANT",
+  "ImageDetailPro": "INVARIANT",
+  "QuickBBox": "INVARIANT"
+ }
+}

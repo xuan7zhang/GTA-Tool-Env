@@ -1,0 +1,25 @@
+{
+ "variant_id": "loo_TextToBbox",
+ "family": "mask",
+ "kept": [
+  "Calculator",
+  "OCR",
+  "CountGivenObject",
+  "ImageDescription",
+  "GoogleSearch",
+  "RegionAttributeDescription",
+  "Plot",
+  "MathOCR",
+  "Solver",
+  "DrawBox",
+  "AddText",
+  "TextToImage",
+  "ImageStylization"
+ ],
+ "dropped": [
+  "TextToBbox"
+ ],
+ "kind": "loo",
+ "left_out": "TextToBbox",
+ "seed": null
+}

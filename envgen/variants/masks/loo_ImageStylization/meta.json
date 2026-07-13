@@ -1,0 +1,25 @@
+{
+ "variant_id": "loo_ImageStylization",
+ "family": "mask",
+ "kept": [
+  "Calculator",
+  "OCR",
+  "CountGivenObject",
+  "ImageDescription",
+  "GoogleSearch",
+  "RegionAttributeDescription",
+  "TextToBbox",
+  "Plot",
+  "MathOCR",
+  "Solver",
+  "DrawBox",
+  "AddText",
+  "TextToImage"
+ ],
+ "dropped": [
+  "ImageStylization"
+ ],
+ "kind": "loo",
+ "left_out": "ImageStylization",
+ "seed": null
+}

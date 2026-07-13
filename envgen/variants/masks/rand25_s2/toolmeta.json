@@ -1,0 +1,106 @@
+{
+ "OCR": {
+  "name": "OCR",
+  "description": "This tool can recognize all text on the input image.",
+  "inputs": [
+   {
+    "type": "image",
+    "name": "image",
+    "description": null,
+    "optional": false,
+    "default": null,
+    "filetype": null
+   }
+  ],
+  "outputs": [
+   {
+    "type": "text",
+    "name": null,
+    "description": "OCR results, include bbox in x1, y1, x2, y2 format and the recognized text.",
+    "optional": false,
+    "default": null,
+    "filetype": null
+   }
+  ]
+ },
+ "CountGivenObject": {
+  "name": "CountGivenObject",
+  "description": "The tool can count the number of a certain object in the image.",
+  "inputs": [
+   {
+    "type": "image",
+    "name": "image",
+    "description": null,
+    "optional": false,
+    "default": null,
+    "filetype": null
+   },
+   {
+    "type": "text",
+    "name": "text",
+    "description": "The object description in English.",
+    "optional": false,
+    "default": null,
+    "filetype": null
+   }
+  ],
+  "outputs": [
+   {
+    "type": "int",
+    "name": null,
+    "description": null,
+    "optional": false,
+    "default": null,
+    "filetype": null
+   }
+  ]
+ },
+ "ImageDescription": {
+  "name": "ImageDescription",
+  "description": "A useful tool that returns a brief description of the input image.",
+  "inputs": [
+   {
+    "type": "image",
+    "name": "image",
+    "description": null,
+    "optional": false,
+    "default": null,
+    "filetype": null
+   }
+  ],
+  "outputs": [
+   {
+    "type": "text",
+    "name": null,
+    "description": null,
+    "optional": false,
+    "default": null,
+    "filetype": null
+   }
+  ]
+ },
+ "Plot": {
+  "name": "Plot",
+  "description": "This tool can execute Python code to plot diagrams. The code should include a function named 'solution'. The function should return the matplotlib figure directly. Avoid printing the answer. The code instance format is as follows:\n\n```python\n# import packages\nimport matplotlib.pyplot as plt\ndef solution():\n    # labels and data\n    cars = ['AUDI', 'BMW', 'FORD', 'TESLA', 'JAGUAR', 'MERCEDES']\n    data = [23, 17, 35, 29, 12, 41]\n\n    # draw diagrams\n    figure = plt.figure(figsize=(8, 6))\n    plt.pie(data, labels=cars, autopct='%1.1f%%', startangle=140)\n    plt.axis('equal')\n    plt.title('Car Distribution')\n    return figure\n```",
+  "inputs": [
+   {
+    "type": "text",
+    "name": "command",
+    "description": "Markdown format Python code",
+    "optional": false,
+    "default": null,
+    "filetype": null
+   }
+  ],
+  "outputs": [
+   {
+    "type": "image",
+    "name": null,
+    "description": null,
+    "optional": false,
+    "default": null,
+    "filetype": null
+   }
+  ]
+ }
+}

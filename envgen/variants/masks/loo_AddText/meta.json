@@ -1,0 +1,25 @@
+{
+ "variant_id": "loo_AddText",
+ "family": "mask",
+ "kept": [
+  "Calculator",
+  "OCR",
+  "CountGivenObject",
+  "ImageDescription",
+  "GoogleSearch",
+  "RegionAttributeDescription",
+  "TextToBbox",
+  "Plot",
+  "MathOCR",
+  "Solver",
+  "DrawBox",
+  "TextToImage",
+  "ImageStylization"
+ ],
+ "dropped": [
+  "AddText"
+ ],
+ "kind": "loo",
+ "left_out": "AddText",
+ "seed": null
+}

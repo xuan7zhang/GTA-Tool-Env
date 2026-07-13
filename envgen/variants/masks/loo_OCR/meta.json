@@ -1,0 +1,25 @@
+{
+ "variant_id": "loo_OCR",
+ "family": "mask",
+ "kept": [
+  "Calculator",
+  "CountGivenObject",
+  "ImageDescription",
+  "GoogleSearch",
+  "RegionAttributeDescription",
+  "TextToBbox",
+  "Plot",
+  "MathOCR",
+  "Solver",
+  "DrawBox",
+  "AddText",
+  "TextToImage",
+  "ImageStylization"
+ ],
+ "dropped": [
+  "OCR"
+ ],
+ "kind": "loo",
+ "left_out": "OCR",
+ "seed": null
+}

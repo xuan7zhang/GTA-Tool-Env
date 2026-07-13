@@ -1,0 +1,25 @@
+{
+ "variant_id": "loo_GoogleSearch",
+ "family": "mask",
+ "kept": [
+  "Calculator",
+  "OCR",
+  "CountGivenObject",
+  "ImageDescription",
+  "RegionAttributeDescription",
+  "TextToBbox",
+  "Plot",
+  "MathOCR",
+  "Solver",
+  "DrawBox",
+  "AddText",
+  "TextToImage",
+  "ImageStylization"
+ ],
+ "dropped": [
+  "GoogleSearch"
+ ],
+ "kind": "loo",
+ "left_out": "GoogleSearch",
+ "seed": null
+}

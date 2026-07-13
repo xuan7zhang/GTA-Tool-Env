@@ -1,0 +1,25 @@
+{
+ "variant_id": "loo_Solver",
+ "family": "mask",
+ "kept": [
+  "Calculator",
+  "OCR",
+  "CountGivenObject",
+  "ImageDescription",
+  "GoogleSearch",
+  "RegionAttributeDescription",
+  "TextToBbox",
+  "Plot",
+  "MathOCR",
+  "DrawBox",
+  "AddText",
+  "TextToImage",
+  "ImageStylization"
+ ],
+ "dropped": [
+  "Solver"
+ ],
+ "kind": "loo",
+ "left_out": "Solver",
+ "seed": null
+}

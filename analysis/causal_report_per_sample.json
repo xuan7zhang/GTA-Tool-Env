@@ -1,0 +1,2642 @@
+{
+ "0": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "1": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "2": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "CountGivenObject",
+   "CountGivenObject"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "ImageDescription"
+  ]
+ },
+ "3": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": true,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "4": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "5": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "CountGivenObject"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "6": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "7": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "ImageDescription",
+   "GoogleSearch"
+  ],
+  "B": false,
+  "B_tools": [
+   "ImageDescription"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "8": {
+  "ref_kind": "subjective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "9": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": true,
+  "C_tools": []
+ },
+ "10": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "11": {
+  "ref_kind": "subjective",
+  "A": true,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": true,
+  "C_tools": []
+ },
+ "12": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "13": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "14": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [
+   "Plot"
+  ],
+  "C": null,
+  "C_tools": [
+   "ImageDescription"
+  ]
+ },
+ "15": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "Plot"
+  ],
+  "B": null,
+  "B_tools": [
+   "Plot"
+  ],
+  "C": null,
+  "C_tools": [
+   "Plot"
+  ]
+ },
+ "16": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "GoogleSearch"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "17": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "Calculator"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "18": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": true,
+  "C_tools": []
+ },
+ "19": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "20": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "GoogleSearch",
+   "Calculator"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "21": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "22": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "23": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "ImageDescription",
+   "Calculator",
+   "Calculator"
+  ],
+  "B": false,
+  "B_tools": [
+   "ImageDescription"
+  ],
+  "C": false,
+  "C_tools": [
+   "ImageDescription"
+  ]
+ },
+ "24": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "25": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR",
+   "Calculator"
+  ],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "Calculator"
+  ]
+ },
+ "26": {
+  "ref_kind": "objective",
+  "A": true,
+  "A_tools": [
+   "OCR",
+   "Calculator"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "Calculator"
+  ]
+ },
+ "27": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR",
+   "Calculator"
+  ],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "28": {
+  "ref_kind": "objective",
+  "A": true,
+  "A_tools": [
+   "OCR",
+   "Calculator"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "Calculator"
+  ]
+ },
+ "29": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "30": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "31": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "32": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR",
+   "Calculator"
+  ],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": true,
+  "C_tools": []
+ },
+ "33": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "GoogleSearch"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "GoogleSearch",
+   "GoogleSearch"
+  ]
+ },
+ "34": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "DrawBox"
+  ],
+  "B": null,
+  "B_tools": [
+   "DrawBox",
+   "DrawBox"
+  ],
+  "C": null,
+  "C_tools": [
+   "DrawBox"
+  ]
+ },
+ "35": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "36": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": false,
+  "B_tools": [
+   "OCR",
+   "NoAction"
+  ],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "NoAction",
+   "NoAction"
+  ]
+ },
+ "37": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "38": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "39": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "40": {
+  "ref_kind": "objective",
+  "A": true,
+  "A_tools": [
+   "GoogleSearch"
+  ],
+  "B": false,
+  "B_tools": [
+   "GoogleSearch"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "41": {
+  "ref_kind": "objective",
+  "A": true,
+  "A_tools": [],
+  "B": true,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": true,
+  "C_tools": []
+ },
+ "42": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "43": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": false,
+  "B_tools": [
+   "GoogleSearch"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "44": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": [
+   "NoAction",
+   "TextToImage"
+  ]
+ },
+ "45": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "TextToImage"
+  ],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": [
+   "TextToImage"
+  ]
+ },
+ "46": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "TextToImage"
+  ],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "47": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [
+   "TextToImage"
+  ],
+  "C": null,
+  "C_tools": [
+   "TextToImage"
+  ]
+ },
+ "48": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "49": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "50": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": true,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "51": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "52": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "53": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR",
+   "Calculator"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "Calculator"
+  ]
+ },
+ "54": {
+  "ref_kind": "subjective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": true,
+  "C_tools": [
+   "OCR"
+  ]
+ },
+ "55": {
+  "ref_kind": "subjective",
+  "A": false,
+  "A_tools": [
+   "OCR",
+   "OCR"
+  ],
+  "B": false,
+  "B_tools": [
+   "ImageDescription"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "56": {
+  "ref_kind": "subjective",
+  "A": false,
+  "A_tools": [
+   "OCR",
+   "ImageDescription"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "57": {
+  "ref_kind": "subjective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "58": {
+  "ref_kind": "subjective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": true,
+  "C_tools": []
+ },
+ "59": {
+  "ref_kind": "subjective",
+  "A": false,
+  "A_tools": [
+   "OCR",
+   "ImageDescription"
+  ],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "60": {
+  "ref_kind": "subjective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "61": {
+  "ref_kind": "subjective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "ImageDescription"
+  ]
+ },
+ "62": {
+  "ref_kind": "subjective",
+  "A": true,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "ImageDescription"
+  ]
+ },
+ "63": {
+  "ref_kind": "subjective",
+  "A": true,
+  "A_tools": [],
+  "B": true,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "64": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "Solver"
+  ],
+  "B": true,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "65": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "Plot"
+  ],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": [
+   "MathOCR"
+  ]
+ },
+ "66": {
+  "ref_kind": "objective",
+  "A": true,
+  "A_tools": [
+   "Plot"
+  ],
+  "B": false,
+  "B_tools": [
+   "Plot"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "67": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "Solver"
+  ],
+  "C": false,
+  "C_tools": [
+   "MathOCR"
+  ]
+ },
+ "68": {
+  "ref_kind": "objective",
+  "A": true,
+  "A_tools": [
+   "Solver"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": true,
+  "C_tools": []
+ },
+ "69": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "70": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": true,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "71": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "Solver"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "72": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "73": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "MathOCR"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "74": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": [
+   "Plot",
+   "Plot"
+  ]
+ },
+ "75": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "Plot"
+  ],
+  "B": null,
+  "B_tools": [
+   "Plot"
+  ],
+  "C": null,
+  "C_tools": []
+ },
+ "76": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "77": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": true,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "78": {
+  "ref_kind": "objective",
+  "A": true,
+  "A_tools": [
+   "OCR",
+   "Calculator"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "Calculator",
+   "Calculator",
+   "Calculator",
+   "Calculator"
+  ]
+ },
+ "79": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "Plot",
+   "Plot",
+   "Plot",
+   "Plot"
+  ],
+  "B": null,
+  "B_tools": [
+   "Plot",
+   "Plot"
+  ],
+  "C": null,
+  "C_tools": []
+ },
+ "80": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": [
+   "Plot",
+   "ImageDescription"
+  ]
+ },
+ "81": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "Plot",
+   "Plot"
+  ],
+  "B": null,
+  "B_tools": [
+   "Plot"
+  ],
+  "C": null,
+  "C_tools": [
+   "Plot"
+  ]
+ },
+ "82": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "Plot",
+   "Plot"
+  ],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": [
+   "Plot",
+   "Plot"
+  ]
+ },
+ "83": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "CountGivenObject"
+  ]
+ },
+ "84": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "85": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "86": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "87": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": true,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "88": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "89": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "90": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "GoogleSearch",
+   "GoogleSearch"
+  ]
+ },
+ "91": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "ImageDescription"
+  ],
+  "B": false,
+  "B_tools": [
+   "ImageDescription",
+   "Calculator"
+  ],
+  "C": false,
+  "C_tools": [
+   "ImageDescription",
+   "GoogleSearch",
+   "Calculator"
+  ]
+ },
+ "92": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR",
+   "Calculator"
+  ],
+  "B": false,
+  "B_tools": [
+   "ImageDescription",
+   "Calculator"
+  ],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "GoogleSearch",
+   "Calculator"
+  ]
+ },
+ "93": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": true,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "ImageDescription",
+   "Calculator"
+  ]
+ },
+ "94": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "OCR"
+  ]
+ },
+ "95": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "96": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "97": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR",
+   "Calculator"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "98": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": [
+   "OCR"
+  ]
+ },
+ "99": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "Calculator"
+  ]
+ },
+ "100": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "Calculator"
+  ]
+ },
+ "101": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR",
+   "Calculator"
+  ],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": [
+   "OCR"
+  ]
+ },
+ "102": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": [
+   "OCR"
+  ]
+ },
+ "103": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "104": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "105": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR",
+   "Calculator"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "Calculator"
+  ]
+ },
+ "106": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "107": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "108": {
+  "ref_kind": "objective",
+  "A": true,
+  "A_tools": [],
+  "B": true,
+  "B_tools": [],
+  "C": true,
+  "C_tools": []
+ },
+ "109": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "110": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "111": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "NoAction",
+   "NoAction",
+   "NoAction",
+   "NoAction",
+   "NoAction",
+   "NoAction",
+   "NoAction",
+   "NoAction",
+   "NoAction"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "112": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "113": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "114": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "DrawBox"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "115": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "116": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "117": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "118": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "119": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "DrawBox"
+  ],
+  "B": null,
+  "B_tools": [
+   "DrawBox"
+  ],
+  "C": null,
+  "C_tools": []
+ },
+ "120": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "DrawBox"
+  ],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "121": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "GoogleSearch"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "122": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "GoogleSearch",
+   "GoogleSearch",
+   "InvalidAction"
+  ]
+ },
+ "123": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "124": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": [
+   "OCR"
+  ]
+ },
+ "125": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "126": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "OCR"
+  ]
+ },
+ "127": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "GoogleSearch",
+   "GoogleSearch"
+  ]
+ },
+ "128": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "129": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "GoogleSearch"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "130": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "131": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "Calculator"
+  ]
+ },
+ "132": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "133": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "Calculator"
+  ]
+ },
+ "134": {
+  "ref_kind": "objective",
+  "A": true,
+  "A_tools": [
+   "OCR",
+   "Calculator"
+  ],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "135": {
+  "ref_kind": "objective",
+  "A": true,
+  "A_tools": [
+   "OCR",
+   "Calculator"
+  ],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "Calculator"
+  ]
+ },
+ "136": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "137": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "NoAction",
+   "NoAction"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "138": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "139": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "TextToImage"
+  ],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": [
+   "TextToImage"
+  ]
+ },
+ "140": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [
+   "TextToImage"
+  ],
+  "C": null,
+  "C_tools": [
+   "TextToImage"
+  ]
+ },
+ "141": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "142": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "143": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "TextToImage"
+  ],
+  "B": null,
+  "B_tools": [
+   "TextToImage"
+  ],
+  "C": null,
+  "C_tools": []
+ },
+ "144": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [
+   "TextToImage"
+  ],
+  "C": null,
+  "C_tools": []
+ },
+ "145": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "TextToImage"
+  ],
+  "B": null,
+  "B_tools": [
+   "TextToImage"
+  ],
+  "C": null,
+  "C_tools": []
+ },
+ "146": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "TextToImage"
+  ],
+  "B": null,
+  "B_tools": [
+   "TextToImage"
+  ],
+  "C": null,
+  "C_tools": []
+ },
+ "147": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "ImageDescription"
+  ],
+  "B": null,
+  "B_tools": [
+   "ImageDescription",
+   "TextToImage"
+  ],
+  "C": null,
+  "C_tools": [
+   "InvalidAction"
+  ]
+ },
+ "148": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "InvalidAction"
+  ],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "149": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "150": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "151": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [
+   "AddText"
+  ],
+  "C": null,
+  "C_tools": []
+ },
+ "152": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "153": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [
+   "AddText"
+  ],
+  "C": null,
+  "C_tools": []
+ },
+ "154": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [
+   "AddText"
+  ],
+  "C": null,
+  "C_tools": []
+ },
+ "155": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": [
+   "AddText"
+  ]
+ },
+ "156": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "157": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "158": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "159": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "160": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "161": {
+  "ref_kind": "subjective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": true,
+  "C_tools": []
+ },
+ "162": {
+  "ref_kind": "subjective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "ImageDescription",
+   "ImageDescription",
+   "ImageDescription"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "163": {
+  "ref_kind": "subjective",
+  "A": true,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": true,
+  "C_tools": []
+ },
+ "164": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": true,
+  "C_tools": []
+ },
+ "165": {
+  "ref_kind": "subjective",
+  "A": true,
+  "A_tools": [],
+  "B": true,
+  "B_tools": [],
+  "C": true,
+  "C_tools": []
+ },
+ "166": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "167": {
+  "ref_kind": "objective",
+  "A": true,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "168": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "169": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "MathOCR"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "MathOCR",
+   "Solver"
+  ]
+ },
+ "170": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "171": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "Solver"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "172": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "MathOCR"
+  ],
+  "B": false,
+  "B_tools": [
+   "MathOCR",
+   "Solver"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "173": {
+  "ref_kind": "objective",
+  "A": true,
+  "A_tools": [
+   "Solver",
+   "NoAction"
+  ],
+  "B": true,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "174": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "MathOCR"
+  ],
+  "B": null,
+  "B_tools": [
+   "MathOCR"
+  ],
+  "C": null,
+  "C_tools": [
+   "MathOCR",
+   "Plot",
+   "NoAction"
+  ]
+ },
+ "175": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "Plot"
+  ],
+  "B": null,
+  "B_tools": [
+   "Plot"
+  ],
+  "C": null,
+  "C_tools": []
+ },
+ "176": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "Plot"
+  ],
+  "B": null,
+  "B_tools": [
+   "ImageDescription"
+  ],
+  "C": null,
+  "C_tools": []
+ },
+ "177": {
+  "ref_kind": "objective",
+  "A": true,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "ImageDescription"
+  ]
+ },
+ "178": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": true,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "179": {
+  "ref_kind": "objective",
+  "A": true,
+  "A_tools": [
+   "ImageDescription",
+   "ImageDescription",
+   "CountGivenObject"
+  ],
+  "B": false,
+  "B_tools": [
+   "ImageDescription"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "180": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "181": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "182": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "183": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "184": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "Calculator"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "185": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "GoogleSearch"
+  ]
+ },
+ "186": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "GoogleSearch"
+  ],
+  "B": false,
+  "B_tools": [
+   "GoogleSearch"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "187": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "ImageDescription",
+   "GoogleSearch"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "188": {
+  "ref_kind": "objective",
+  "A": true,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": true,
+  "C_tools": [
+   "ImageDescription"
+  ]
+ },
+ "189": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": true,
+  "B_tools": [],
+  "C": true,
+  "C_tools": []
+ },
+ "190": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "CountGivenObject"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "191": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "192": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "ImageDescription"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "193": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "ImageDescription",
+   "Calculator"
+  ],
+  "C": false,
+  "C_tools": [
+   "ImageDescription",
+   "GoogleSearch"
+  ]
+ },
+ "194": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": false,
+  "B_tools": [
+   "OCR",
+   "Calculator"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "195": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": [
+   "OCR"
+  ]
+ },
+ "196": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR",
+   "Calculator"
+  ],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "197": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "GoogleSearch"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "GoogleSearch",
+   "GoogleSearch"
+  ]
+ },
+ "198": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "OCR"
+  ]
+ },
+ "199": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "AddText"
+  ]
+ },
+ "200": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "Calculator"
+  ]
+ },
+ "201": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "Calculator"
+  ]
+ },
+ "202": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "203": {
+  "ref_kind": "objective",
+  "A": true,
+  "A_tools": [
+   "OCR",
+   "Calculator"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "Calculator"
+  ]
+ },
+ "204": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR",
+   "Calculator",
+   "NoAction"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "NoAction",
+   "NoAction",
+   "NoAction",
+   "OCR",
+   "OCR",
+   "OCR",
+   "OCR",
+   "Calculator"
+  ]
+ },
+ "205": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": true,
+  "C_tools": []
+ },
+ "206": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "OCR",
+   "Calculator"
+  ]
+ },
+ "207": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "DrawBox"
+  ]
+ },
+ "208": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "209": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "210": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "211": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "DrawBox"
+  ]
+ },
+ "212": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": []
+ },
+ "213": {
+  "ref_kind": "objective",
+  "A": true,
+  "A_tools": [
+   "OCR",
+   "GoogleSearch"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "214": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": []
+ },
+ "215": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR",
+   "GoogleSearch"
+  ],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": [
+   "OCR"
+  ]
+ },
+ "216": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "OCR"
+  ],
+  "B": false,
+  "B_tools": [
+   "OCR"
+  ],
+  "C": false,
+  "C_tools": [
+   "OCR"
+  ]
+ },
+ "217": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "ImageDescription"
+  ]
+ },
+ "218": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [
+   "ImageDescription"
+  ],
+  "B": false,
+  "B_tools": [],
+  "C": false,
+  "C_tools": [
+   "OCR"
+  ]
+ },
+ "219": {
+  "ref_kind": "objective",
+  "A": false,
+  "A_tools": [],
+  "B": false,
+  "B_tools": [],
+  "C": true,
+  "C_tools": []
+ },
+ "220": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "TextToImage"
+  ],
+  "B": null,
+  "B_tools": [
+   "TextToImage"
+  ],
+  "C": null,
+  "C_tools": [
+   "TextToImage"
+  ]
+ },
+ "221": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [
+   "TextToImage"
+  ],
+  "C": null,
+  "C_tools": [
+   "TextToImage"
+  ]
+ },
+ "222": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [
+   "TextToImage"
+  ],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": [
+   "TextToImage"
+  ]
+ },
+ "223": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [
+   "TextToImage"
+  ],
+  "C": null,
+  "C_tools": []
+ },
+ "224": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "225": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [
+   "AddText"
+  ],
+  "C": null,
+  "C_tools": [
+   "AddText"
+  ]
+ },
+ "226": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [
+   "AddText"
+  ],
+  "C": null,
+  "C_tools": []
+ },
+ "227": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ },
+ "228": {
+  "ref_kind": "imggen",
+  "A": null,
+  "A_tools": [],
+  "B": null,
+  "B_tools": [],
+  "C": null,
+  "C_tools": []
+ }
+}

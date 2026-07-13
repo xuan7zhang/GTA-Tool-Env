@@ -1,0 +1,54 @@
+{
+ "ours_echo": {
+  "keep": [
+   "CountGivenObject",
+   "GoogleSearch",
+   "RegionAttributeDescription",
+   "MathOCR",
+   "Solver",
+   "DrawBox",
+   "AddText",
+   "ImageStylization",
+   "DirectImageQA",
+   "InstantAnswer",
+   "SmartCount",
+   "ExpertMath",
+   "VerifiedFact",
+   "QuickBBox"
+  ],
+  "pruned": [
+   "TextToBbox",
+   "Calculator",
+   "ImageDetailPro",
+   "Plot",
+   "TextToImage",
+   "ImageDescription",
+   "PreciseOCR",
+   "OCR"
+  ]
+ },
+ "echo": {
+  "Calculator": 0.4,
+  "OCR": 0.13219046268241083,
+  "CountGivenObject": 0.0,
+  "ImageDescription": 0.16426045762708524,
+  "GoogleSearch": 0.0,
+  "RegionAttributeDescription": 0.0,
+  "TextToBbox": 0.4444444444444444,
+  "Plot": 0.20454545454545456,
+  "MathOCR": 0.0,
+  "Solver": 0.0,
+  "DrawBox": 0.0,
+  "AddText": 0.0,
+  "TextToImage": 0.1888111888111888,
+  "ImageStylization": 0.0,
+  "DirectImageQA": 0.044444444444444446,
+  "InstantAnswer": 0.08333333333333333,
+  "PreciseOCR": 0.14285714285714285,
+  "SmartCount": 0.0,
+  "ExpertMath": 0.0,
+  "VerifiedFact": 0.08333333333333333,
+  "ImageDetailPro": 0.28846153846153844,
+  "QuickBBox": 0.09090909090909091
+ }
+}

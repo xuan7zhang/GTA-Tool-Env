@@ -1,0 +1,25 @@
+{
+ "variant_id": "loo_RegionAttributeDescription",
+ "family": "mask",
+ "kept": [
+  "Calculator",
+  "OCR",
+  "CountGivenObject",
+  "ImageDescription",
+  "GoogleSearch",
+  "TextToBbox",
+  "Plot",
+  "MathOCR",
+  "Solver",
+  "DrawBox",
+  "AddText",
+  "TextToImage",
+  "ImageStylization"
+ ],
+ "dropped": [
+  "RegionAttributeDescription"
+ ],
+ "kind": "loo",
+ "left_out": "RegionAttributeDescription",
+ "seed": null
+}

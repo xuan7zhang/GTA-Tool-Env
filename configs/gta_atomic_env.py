@@ -1,0 +1,1 @@
+/project/6101776/xzhan576/gta2-envlab/GTA/opencompass/configs/gta_atomic_env.py

@@ -1,0 +1,22 @@
+{
+ "variant_id": "misleading_s0",
+ "family": "phi",
+ "kind": "misleading",
+ "seed": 0,
+ "derangement": {
+  "Calculator": "ImageDescription",
+  "OCR": "ImageStylization",
+  "CountGivenObject": "Solver",
+  "ImageDescription": "TextToBbox",
+  "GoogleSearch": "RegionAttributeDescription",
+  "RegionAttributeDescription": "Calculator",
+  "TextToBbox": "Plot",
+  "Plot": "DrawBox",
+  "MathOCR": "AddText",
+  "Solver": "OCR",
+  "DrawBox": "TextToImage",
+  "AddText": "GoogleSearch",
+  "TextToImage": "CountGivenObject",
+  "ImageStylization": "MathOCR"
+ }
+}

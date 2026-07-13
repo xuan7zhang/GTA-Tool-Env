@@ -1,0 +1,41 @@
+{
+ "full14": {
+  "keep": [
+   "Calculator",
+   "OCR",
+   "CountGivenObject",
+   "ImageDescription",
+   "GoogleSearch",
+   "RegionAttributeDescription",
+   "TextToBbox",
+   "Plot",
+   "MathOCR",
+   "Solver",
+   "DrawBox",
+   "AddText",
+   "TextToImage",
+   "ImageStylization"
+  ],
+  "pruned": []
+ },
+ "lean9": {
+  "keep": [
+   "Calculator",
+   "OCR",
+   "CountGivenObject",
+   "ImageDescription",
+   "GoogleSearch",
+   "RegionAttributeDescription",
+   "TextToBbox",
+   "MathOCR",
+   "Solver"
+  ],
+  "pruned": [
+   "DrawBox",
+   "AddText",
+   "Plot",
+   "TextToImage",
+   "ImageStylization"
+  ]
+ }
+}

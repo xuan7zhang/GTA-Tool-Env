@@ -1,0 +1,57 @@
+{
+ "full22": {
+  "keep": [
+   "Calculator",
+   "OCR",
+   "CountGivenObject",
+   "ImageDescription",
+   "GoogleSearch",
+   "RegionAttributeDescription",
+   "TextToBbox",
+   "Plot",
+   "MathOCR",
+   "Solver",
+   "DrawBox",
+   "AddText",
+   "TextToImage",
+   "ImageStylization",
+   "DirectImageQA",
+   "InstantAnswer",
+   "PreciseOCR",
+   "SmartCount",
+   "ExpertMath",
+   "VerifiedFact",
+   "ImageDetailPro",
+   "QuickBBox"
+  ],
+  "pruned": []
+ },
+ "pruned14": {
+  "keep": [
+   "Calculator",
+   "OCR",
+   "CountGivenObject",
+   "ImageDescription",
+   "GoogleSearch",
+   "RegionAttributeDescription",
+   "TextToBbox",
+   "Plot",
+   "MathOCR",
+   "Solver",
+   "DrawBox",
+   "AddText",
+   "TextToImage",
+   "ImageStylization"
+  ],
+  "pruned": [
+   "DirectImageQA",
+   "InstantAnswer",
+   "PreciseOCR",
+   "SmartCount",
+   "ExpertMath",
+   "VerifiedFact",
+   "ImageDetailPro",
+   "QuickBBox"
+  ]
+ }
+}

@@ -1,0 +1,25 @@
+{
+ "variant_id": "loo_Calculator",
+ "family": "mask",
+ "kept": [
+  "OCR",
+  "CountGivenObject",
+  "ImageDescription",
+  "GoogleSearch",
+  "RegionAttributeDescription",
+  "TextToBbox",
+  "Plot",
+  "MathOCR",
+  "Solver",
+  "DrawBox",
+  "AddText",
+  "TextToImage",
+  "ImageStylization"
+ ],
+ "dropped": [
+  "Calculator"
+ ],
+ "kind": "loo",
+ "left_out": "Calculator",
+ "seed": null
+}

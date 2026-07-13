@@ -1,0 +1,7 @@
+{
+ "variant_id": "paraphrase_s0",
+ "family": "phi",
+ "kind": "paraphrase",
+ "seed": 0,
+ "external": false
+}

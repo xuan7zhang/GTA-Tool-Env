@@ -1,0 +1,39 @@
+{
+ "baseline_prim": {
+  "keep": [
+   "Calculator",
+   "OCR",
+   "CountGivenObject",
+   "ImageDescription",
+   "GoogleSearch",
+   "RegionAttributeDescription",
+   "TextToBbox",
+   "Plot",
+   "MathOCR",
+   "Solver",
+   "DrawBox",
+   "AddText",
+   "TextToImage",
+   "ImageStylization"
+  ],
+  "extra": ""
+ },
+ "composed_macro": {
+  "keep": [
+   "Calculator",
+   "CountGivenObject",
+   "GoogleSearch",
+   "RegionAttributeDescription",
+   "TextToBbox",
+   "Plot",
+   "MathOCR",
+   "Solver",
+   "DrawBox",
+   "AddText",
+   "TextToImage",
+   "ImageStylization",
+   "PerceiveAll"
+  ],
+  "extra": "PerceiveAll"
+ }
+}

@@ -1,0 +1,25 @@
+{
+ "variant_id": "loo_Plot",
+ "family": "mask",
+ "kept": [
+  "Calculator",
+  "OCR",
+  "CountGivenObject",
+  "ImageDescription",
+  "GoogleSearch",
+  "RegionAttributeDescription",
+  "TextToBbox",
+  "MathOCR",
+  "Solver",
+  "DrawBox",
+  "AddText",
+  "TextToImage",
+  "ImageStylization"
+ ],
+ "dropped": [
+  "Plot"
+ ],
+ "kind": "loo",
+ "left_out": "Plot",
+ "seed": null
+}

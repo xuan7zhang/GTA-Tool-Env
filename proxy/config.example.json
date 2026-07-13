@@ -1,0 +1,12 @@
+{
+  "upstream": "http://127.0.0.1:16181",
+  "mode": "passthrough",
+  "per_tool_modes": {},
+  "mask": null,
+  "unavailable_tools": ["GoogleSearch", "MathOCR"],
+  "p_fail": 0.1,
+  "seed": 0,
+  "phi_toolmeta": null,
+  "log_path": "/datasets/omni_pretraining/gta2/results/proxy_calls.jsonl",
+  "run_meta": {"run_id": "manual"}
+}
