@@ -7,6 +7,20 @@ from mmengine.registry import Registry
 
 REGISTRY = Registry('helper')
 
+_PRED_MASK_CACHE = None
+
+
+def _load_predicted_mask():
+    """Load the no-GT per-task predicted keep-lists (GTA_PREDICTED_MASK=path.json,
+    keyed by sample index). Cached; returns None when the env var is unset."""
+    global _PRED_MASK_CACHE
+    if _PRED_MASK_CACHE is None:
+        import os as _os
+        import json as _json
+        p = _os.getenv('GTA_PREDICTED_MASK')
+        _PRED_MASK_CACHE = _json.load(open(p)) if p and _os.path.exists(p) else {}
+    return _PRED_MASK_CACHE or None
+
 try:
     import lagent
     import agentlego
@@ -260,6 +274,7 @@ class LagentAgent:
     def set_task_id(self, task_id):
         """Tag every remote tool call with the current sample index so the
         tool-server proxy can log (task_id, turn, tool, mode) per call."""
+        self._task_id = task_id
         for tool in self._remote_tools:
             tool.headers = {**(tool.headers or {}), 'X-GTA-Task-Id': str(task_id)}
 
@@ -314,6 +329,11 @@ class LagentAgent:
             _hide = set(filter(None, _os.getenv('GTA_HIDE_TOOLS', '').split(',')))
             if _hide:
                 tools = [t for t in tools if getattr(t, 'name', None) not in _hide]
+            _pm = _load_predicted_mask()
+            if _pm is not None:
+                _keep = set(_pm.get(str(getattr(self, '_task_id', '')), []))
+                if _keep:
+                    tools = [t for t in tools if getattr(t, 'name', None) in _keep]
             files = [item for item in resources if item['type'] == 'file']
 
         action_executor = lagent.ActionExecutor(actions=tools)
@@ -358,6 +378,15 @@ class LagentAgent:
             # forwardable for a macro's internal proxy calls.
             for _name in filter(None, _os.getenv('GTA_HIDE_TOOLS', '').split(',')):
                 tools.pop(_name, None)
+            # GTA_PREDICTED_MASK: no-GT per-task relevance selector. Restrict the
+            # menu to the predicted keep-set for this task_id (json keyed by sample
+            # index). Used with GTA_EXTRA_TOOLS=<all tools> so the start pool is the
+            # full set and the predictor does the masking.
+            _pm = _load_predicted_mask()
+            if _pm is not None:
+                _keep = set(_pm.get(str(getattr(self, '_task_id', '')), []))
+                if _keep:
+                    tools = {k: v for k, v in tools.items() if k in _keep}
             files = [item for item in resources if item['type'] == 'file']
 
         action_executor = self.agent._action_executor
