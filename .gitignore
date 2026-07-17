@@ -10,3 +10,10 @@ __pycache__/
 *.log
 *.freeze.txt
 .venv/
+
+# tool-generated output artifacts (DrawBox/AddText/TextToImage/Plot etc.)
+GTA/agentlego/*.jpg
+GTA/agentlego/*.png
+GTA/agentlego/output/
+GTA/agentlego/drawn_boxes/
+GTA/agentlego/generated/
