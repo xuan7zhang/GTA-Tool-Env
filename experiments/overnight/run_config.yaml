@@ -1,0 +1,73 @@
+# Overnight GTA-Atomic experiment queue. Consumed by orchestrate.py.
+# Hard constraints (do not change, or data becomes incomparable to the decisive table):
+#   32B fp16 (NO quantization) + greedy decoding; every eval reuses the same proxy,
+#   judge, and seed set [0,1,2]. OOM degrade = shrink max_model_len then move
+#   caption/imggen tools to CPU; never swap to a quantized model.
+
+global:
+  model: Qwen2.5-32B-Instruct
+  dtype: float16                    # fp16, quantization forbidden
+  decoding:
+    do_sample: false                # greedy
+    temperature: 0.0
+  seeds: [0, 1, 2]
+  proxy_url: http://127.0.0.1:16281
+  llm_url:   http://127.0.0.1:12580/v1/chat/completions
+  llm_port: 12580
+  vllm:
+    gpu_memory_utilization: 0.62    # single 96GB card; leaves ~27GB for AgentLego vision tools
+    max_model_len: 18944
+    startup_timeout: 1200
+    oom_degrade:                    # ordered fallback; NEVER quantize
+      - {max_model_len: 12288}
+      - {tools_to_cpu: [ImageDescription, RegionAttributeDescription, TextToImage, ImageStylization]}
+  retries: 2
+  heartbeat_sec: 30
+  gate_threshold_callfreq: 13.5
+  out_root: runs
+
+jobs:
+  # ---- CPU / probe first (no LLM) ----
+  - name: arc2_effect_size          # effect-size upper bound on the Arc-2 mask null
+    kind: analysis
+    script: arc2_effect_size.py
+    args: ["--mask-log", "auto", "--alpha", "0.05"]
+
+  - name: l1_probe_budget_curve     # probes talk to the tool server directly, no LLM
+    kind: probe
+    script: probes.py
+    args: ["--mode", "budget-curve", "--levels", "1"]
+
+  # ---- GPU (eval) jobs; vLLM comes up once before these ----
+  - name: callfreq_attractive_seed2 # fill in the 3rd seed of call_frequency (attractive)
+    kind: eval
+    method: call_frequency
+    regime: attractive
+    seed: 2
+    aggregate_seeds: [0, 1, 2]      # metrics.mean_acc = mean over these seeds
+    sets_flag:                      # gate: if the attractive mean beats 13.5, enable iter-2
+      name: run_iter2_declutter
+      metric: mean_acc
+      op: ">"
+      value: 13.5
+
+  - name: decisive_table
+    kind: eval
+    matrix:
+      condition: [keep_all, call_frequency, answer_echo, ground, ground_plus, oracle]
+      regime: [attractive, subtle]
+      seed: [0, 1, 2]
+
+  - name: octotools_greedy          # outcome-based greedy validation search (regime-fragile by design)
+    kind: eval
+    script: octotools_greedy.py
+    matrix:
+      regime: [attractive, subtle]
+      seed: [0, 1, 2]
+
+  - name: iter2_declutter           # conditional: only if the gate above fired
+    kind: eval
+    requires_flag: run_iter2_declutter
+    method: ground_plus_declutter3  # prune 3 image tools instead of 5
+    regime: attractive
+    seed: 0
