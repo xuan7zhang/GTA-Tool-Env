@@ -80,6 +80,11 @@ models = [
             max_seq_len=int(os.getenv('GTA_MAX_SEQ_LEN', '32768')),
             retry=5,
             stop='<|im_end|>',
+            # Decoding temperature. Default 0 = greedy/DETERMINISTIC decoding, so runs
+            # are reproducible (the OpenCompass OpenAI default is 0.7, which silently
+            # sampled and was the main source of the +-2.5-3 run-to-run AnsAcc noise).
+            # Set GTA_TEMP=0.7 (or any value) to opt back into sampled decoding.
+            temperature=float(os.getenv('GTA_TEMP', '0')),
         ),
         tool_server=os.getenv('GTA_TOOLSERVER', 'http://127.0.0.1:16281'),
         tool_meta=os.getenv('GTA_TOOLMETA', 'data/gta_dataset/toolmeta.json'),

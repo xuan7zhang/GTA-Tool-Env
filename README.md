@@ -120,11 +120,13 @@ bash experiments/regionread_exp.sh                                  # compositio
 The services are held by `srun --overlap` inside tmux, so they survive your shell
 exiting; they die when the SLURM allocation ends. Rebuild on a new node if reallocated.
 
-### Deterministic vs. sampled decoding
+### Decoding is deterministic by default
 
-Set `GTA_TEMP=0` for greedy (deterministic) decoding; unset it for the harness default
-(temperature 0.7, sampled). Greedy gives a much tighter run-to-run noise floor and is
-recommended for accuracy comparisons.
+The eval config uses **greedy (temperature 0) decoding by default**, so runs are
+reproducible. (The OpenCompass `OpenAI` default is 0.7, which silently sampled and was
+the main source of the ±2.5–3 run-to-run AnsAcc noise; greedy tightens the residual
+floor to ~±0.8, from tool-server nondeterminism only.) Set `GTA_TEMP=0.7` to opt back
+into sampled decoding.
 
 ---
 
