@@ -1,0 +1,76 @@
+{
+  "mean_acc": 14.124,
+  "final_full229": 14.124,
+  "regime": "subtle",
+  "seed": 0,
+  "valn": 30,
+  "acc_base": 13.164,
+  "marginal": {
+    "Calculator": -0.506,
+    "OCR": 4.891,
+    "CountGivenObject": 3.547,
+    "ImageDescription": 3.841,
+    "GoogleSearch": -3.758,
+    "RegionAttributeDescription": 0.065,
+    "TextToBbox": -0.103,
+    "Plot": -7.991,
+    "MathOCR": 6.939,
+    "Solver": -3.799,
+    "DrawBox": -6.718,
+    "AddText": -0.493,
+    "TextToImage": -4.393,
+    "ImageStylization": -3.39,
+    "DirectImageQA": -3.874,
+    "InstantAnswer": 4.121,
+    "PreciseOCR": 3.609,
+    "SmartCount": 0.112,
+    "ExpertMath": -0.269,
+    "VerifiedFact": -0.018,
+    "ImageDetailPro": 0.07,
+    "QuickBBox": -0.084
+  },
+  "selected_stage2": [
+    "CountGivenObject",
+    "ImageDescription",
+    "ImageDetailPro",
+    "InstantAnswer",
+    "MathOCR",
+    "OCR",
+    "PreciseOCR",
+    "RegionAttributeDescription",
+    "SmartCount"
+  ],
+  "stage3": {
+    "acc_selected": 17.165,
+    "acc_full": 13.164,
+    "reverted_to_full": false
+  },
+  "final_set": [
+    "CountGivenObject",
+    "ImageDescription",
+    "ImageDetailPro",
+    "InstantAnswer",
+    "MathOCR",
+    "OCR",
+    "PreciseOCR",
+    "RegionAttributeDescription",
+    "SmartCount"
+  ],
+  "kept_poison": [
+    "InstantAnswer",
+    "PreciseOCR",
+    "SmartCount",
+    "ImageDetailPro"
+  ],
+  "pruned_genuine": [
+    "Calculator",
+    "GoogleSearch",
+    "TextToBbox",
+    "Plot",
+    "Solver",
+    "DrawBox",
+    "AddText",
+    "TextToImage",
+    "ImageStylization"
+  ]
+}
