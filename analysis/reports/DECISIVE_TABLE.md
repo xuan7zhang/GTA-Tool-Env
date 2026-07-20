@@ -56,6 +56,37 @@ The probe needs a handful of **label-free** calls per tool and is agent-independ
 OctoTools needs **O(n) full labelled validation evaluations**; CallFreq/AnswerEcho need
 full agent rollouts. This asymmetry belongs in the table's discussion.
 
+## Clean-pool control — does the defence harm when there is nothing to defend against?
+
+A defence that damages a clean environment is not deployable. We separate the two
+components:
+
+| condition (clean pool, **no injection**, 32B greedy) | AnsAcc |
+|---|---|
+| natural 14-tool menu (`gm32b_oracle`) | 14.3 |
+| forced all-14 (`gm32b_full`) | 14.5 *(n=2)* |
+| **Ground (probe only)** | **≡ natural, by construction** |
+| **Ground+ (probe + declutter, 9 tools)** | **12.28** |
+
+- **Ground is a provable no-op on a clean pool.** The probe prunes only tools it
+  *positively* proves input-degenerate; anything untestable or errored is kept
+  (fail-safe). Empirically **0/14 genuine tools are flagged INVARIANT** (5 verified
+  `grounded`, 3 `untestable`, 6 `errored`), so its keep-set is byte-identical to
+  keep_all — it cannot self-harm. This is the property no outcome-based method has:
+  CallFreq/AnswerEcho/OctoTools all false-prune genuine tools and fall below
+  no-defence in at least one regime.
+- **Ground+ is not free.** Its declutter component fires regardless of whether poison
+  is present, so on a clean pool it still removes the 5 image-output tools and
+  **costs ≈2 points** (12.28 vs 14.3). The extra subtle-regime gain of Ground+ over
+  Ground (15.40 vs 13.83) is bought with this clean-environment cost.
+- **Deployment reading:** **Ground is the safe default** — use it when you do not know
+  whether the pool is compromised. **Ground+ only when injection is suspected**, and
+  report the declutter trade-off (it also depresses image-generation queries).
+
+*(Caveat: the clean-pool Ground+ run is n=1 and its paired same-stack baseline did not
+finish before the node expired, so the ≈2-point cost is measured across stacks
+(±0.8 noise). It is outside the noise floor but deserves a paired re-run.)*
+
 ## Caveats
 
 Seed 1 (greedy ⇒ ±0.8 residual, so single-seed separations of ≥2 points are meaningful;
