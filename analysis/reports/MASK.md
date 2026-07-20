@@ -1,5 +1,39 @@
 # Mask axis (m) — results report
 
+> **UPDATE (greedy re-run).** Everything below the "greedy capability curve" section
+> was measured under the harness default at the time, which silently **sampled**
+> (temperature 0.7 — the config never set it). Decoding is now deterministic by
+> default (`GTA_TEMP=0`), which drops the noise floor from ±2.5–3 to ~±0.8 and
+> reveals a much larger oracle-mask signal. **The greedy numbers immediately below
+> supersede the sampled numbers in the later sections.**
+
+## Greedy capability curve (deterministic decoding, full 229, 3 seeds unless noted)
+
+| model | full (mask off) | oracle (per-task GT) | **oracle gain** | predicted (no-GT hybrid) |
+|---|---|---|---|---|
+| Qwen2.5-3B | 9.8 | 14.7 | **+4.9** | 10.1 |
+| **Qwen2.5-7B** | 10.6 | 21.2 | **+10.6** | 12.7 |
+| Qwen2.5-14B | 12.5 | 11.7 | **−0.8** | 14.4 |
+| Qwen2.5-32B | 14.5 *(n=2)* | 14.3 *(n=1)* | **−0.2** | 13.9 *(n=1)* |
+
+**The gain is non-monotonic — an inverted U that peaks at medium capability.** Not
+"gain ∝ 1/capability" as the sampled runs suggested:
+
+- **3B** is too weak to exploit a clean menu (it misselects and calls tools 5× more
+  often regardless) → modest gain.
+- **7B** is the sweet spot: competent enough to use tools, weak enough that clutter
+  makes it misselect → the mask nearly **doubles** its accuracy (10.6 → 21.2).
+- **14B / 32B** can already ignore honest clutter → gain collapses to ≈0 (within the
+  ±0.8 greedy noise floor); at 14B the GT-minimal menu is even slightly *restrictive*.
+
+The no-GT hybrid selector recovers only part of the gain where the gain exists
+(7B ≈20%), confirming that per-task relevance carries signal but is hard to predict
+without ground truth.
+
+*(32B is 1–2 seeds: its node expired mid-run. The point is a qualitative "≈0 at the
+strong end", which both seeds agree on, not a precise mean.)*
+
+
 **Question.** In E = (m, C, Φ), can the tool **mask** be optimized to raise agent
 accuracy — and can that be done *without ground truth*? Testbed: GTA-Atomic (229
 tasks, 14 tools), Qwen2.5 3B/7B/14B, proxy-in-front-of-toolserver, AnsAcc (end).
