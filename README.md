@@ -58,14 +58,15 @@ envs, model checkpoints, the dataset, and run outputs — live on a separate lar
 
 ### 1. Point the two location variables at your machine
 
-Edit the top of [`scripts/common_env.sh`](scripts/common_env.sh):
+Override the two location variables when needed (the code path otherwise
+defaults to the current checkout):
 
 ```bash
-export GTA_LAB=/path/to/this/repo          # code (this checkout)
-export GTA_BIG=/path/to/large/volume/gta2  # envs, models, data, results
+export GTA_LAB=/path/to/this/repo          # optional; defaults to this checkout
+export GTA_BIG=/path/to/large/volume/gta2  # defaults to /datasets/omni_pretraining/gta2
 ```
 
-All other scripts `source common_env.sh`, so this is the only place paths are set.
+All other scripts `source common_env.sh`, so exported overrides propagate to them.
 GPU/port defaults also live here and are overridable via env:
 
 ```bash

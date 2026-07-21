@@ -8,6 +8,23 @@ Reports + selector JSONs are in `../analysis/reports/`.
 
 ## E = (m, C, Φ) axis experiments
 
+### Exact tool contribution (Shapley)
+
+- `shapley_exp.sh [prefix] [toolmeta.json] [seed_csv]` generates and evaluates
+  every one of the `2^n` candidate-tool coalitions, then computes exact Shapley
+  contribution to `answer_acc`. The sweep is resumable through the existing
+  `DONE` markers. Set `SHAPLEY_TOOLS=A,B,...` to attribute a smaller candidate
+  set and `SHAPLEY_FIXED_TOOLS=X,Y,...` for always-on controls. Outputs are
+  written under `$SHAPLEY_WORK/analysis/` (or
+  `$GTA_BIG/results/<prefix>_work/analysis/` by default).
+
+  By default every task's menu is exactly the current coalition, matching the
+  existing OctoTools baseline. Set `SHAPLEY_NATURAL_MENUS=1` to instead use the
+  intersection of each task's natural resource list and the coalition.
+
+  The default 14-tool GTA pool requires 16,384 evaluations per seed. This is an
+  exact factorial design, not a permutation or Monte Carlo approximation.
+
 ### m — mask / tool-set (the accuracy-gain result)
 - `mask_model.sh <model> <port> <prefix>` — injection-free mask experiment:
   `full_everywhere` (every task sees all 14 tools) vs `per_task` (only its 1–4

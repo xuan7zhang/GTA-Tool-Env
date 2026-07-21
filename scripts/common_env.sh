@@ -1,7 +1,9 @@
 # Shared paths for gta2-envlab. Source this from every script.
-export GTA_BIG=/datasets/omni_pretraining/gta2          # big volume: envs, models, data, results
-export GTA_LAB=/project/6101776/xzhan576/gta2-envlab    # code
-export GTA_REPO=$GTA_LAB/GTA
+_GTA_COMMON_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+export GTA_BIG=${GTA_BIG:-/datasets/omni_pretraining/gta2}  # big volume: envs, models, data, results
+export GTA_LAB=${GTA_LAB:-$(cd "$_GTA_COMMON_DIR/.." && pwd)} # this checkout unless overridden
+export GTA_REPO=${GTA_REPO:-$GTA_LAB/GTA}
+unset _GTA_COMMON_DIR
 export PIP_CACHE_DIR=$GTA_BIG/pip_cache
 # Override ALL HF cache vars: the user's ~/.bashrc points them at
 # ~/scratch/huggingface (scratch is 100% full -> Errno 122 quota), and
