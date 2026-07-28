@@ -44,8 +44,13 @@ import time
 from collections import defaultdict
 from typing import Optional
 
+import sys
+
 import httpx
 import uvicorn
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir))
+from taco import transform as _taco  # noqa: E402  (TACO output intervention layer)
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 
@@ -68,6 +73,14 @@ STATE = {
     "phi_toolmeta": None,              # path to a Φ-variant toolmeta.json:
                                        # its descriptions overwrite openapi
                                        # summaries (the agent-visible text)
+    # --- TACO (tool-attribute causal optimization) output intervention layer ---
+    # {"default": {...spec...}, "per_tool": {tool: {...spec...}}, "exclude": [...]}
+    # A spec is {"format": "F0".."F6",
+    #            "length": {"level": "L0".."L5", "mechanism": ...} | null,
+    #            "position": "front"|"middle"|"back" | null}.
+    # None (default) => byte-identical behaviour to the pre-TACO proxy.
+    "taco_spec": None,
+    "taco_log_path": None,             # jsonl transformation log (Phase 1)
 }
 _openapi_cache = {"raw": None, "tool_output_types": {}}
 _log_lock = threading.Lock()
@@ -285,6 +298,37 @@ async def proxy(path: str, request: Request):
     out = upstream.content
     rec = {**base_rec, "status": upstream.status_code, "raw_return_hash": _sha(out),
            "raw_return_bytes": len(out)}
+
+    # TACO: attribute intervention on the tool's *output* (format / length /
+    # evidence position). Applied only on a successful passthrough return, so
+    # it composes with, and never masks, the failure/corruption modes above.
+    if (STATE.get("taco_spec") and upstream.status_code == 200
+            and mode not in ("corrupt_output", "format_only")):
+        tspec = _taco.spec_for(tool, STATE["taco_spec"])
+        if tspec:
+            try:
+                payload = json.loads(out)
+            except json.JSONDecodeError:
+                payload = None
+            if payload is not None:
+                new_payload, trec = _taco.transform(tool, payload, tspec)
+                if trec.get("applied"):
+                    out = json.dumps(new_payload, ensure_ascii=False).encode()
+                    rec["taco_applied"] = True
+                    rec["taco_tokens_before"] = trec.get("tokens_before")
+                    rec["taco_tokens_after"] = trec.get("tokens_after")
+                    rec["taco_evidence_density"] = trec.get("evidence_density")
+                    rec["taco_preserved"] = trec.get("preservation", {}).get("units_present")
+                else:
+                    rec["taco_applied"] = False
+                    rec["taco_skip"] = trec.get("reason")
+                tlog = STATE.get("taco_log_path")
+                if tlog:
+                    trec.update(task_id=task_id, turn=turn,
+                                run_meta=STATE["run_meta"], ts=time.time())
+                    with _log_lock:
+                        with open(tlog, "a") as f:
+                            f.write(json.dumps(trec, default=str) + "\n")
 
     if mode in ("corrupt_output", "format_only") and upstream.status_code == 200:
         if not _openapi_cache["tool_output_types"]:
