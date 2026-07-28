@@ -48,6 +48,10 @@ STOP = set("the a an of to in on at for and or is are was were be been it its th
            "as with by from we you i need answer question final so can will would should".split())
 
 
+def is_abstention(ans: str) -> bool:
+    return bool(ans and ABSTAIN_RE.search(ans))
+
+
 def load_runs():
     runs = []
     for p in sorted(glob.glob(f"{TACO}/raw_runs/*/record.json")):
@@ -140,6 +144,10 @@ def build():
             n_tasks=r["n_tasks"], n_scored=r["n_scored"],
             answer_acc=r["answer_acc"], official_answer_acc=r.get("official_answer_acc"),
             n_engaged=r["n_engaged"], n_fired=r["n_taco_fired"],
+            abstention_rate=float(np.mean([is_abstention(t.get("answer"))
+                                           for t in r["tasks"].values()])) if r["tasks"] else None,
+            answered_rate=float(np.mean([bool(t.get("answered"))
+                                         for t in r["tasks"].values()])) if r["tasks"] else None,
             tool_calls=r["tool_calls"], invalid_calls=r["invalid_calls"],
             visible_tool_tokens=r["visible_tool_tokens"],
             native_tool_tokens=r["native_tool_tokens"],
@@ -209,6 +217,8 @@ def build():
                 fired=bool(ti.get("taco_fired")), fired_ctl=bool(tc.get("taco_fired")),
                 engaged=bool(ti["engaged"]), engaged_ctl=bool(tc["engaged"]),
                 n_calls=ti["n_calls"], n_calls_ctl=tc["n_calls"],
+                abstained=int(is_abstention(ti.get("answer"))),
+                abstained_ctl=int(is_abstention(tc.get("answer"))),
                 n_turns=ti["n_turns"], invalid=ti["n_invalid"],
                 tokens=ti.get("visible_tool_tokens"),
                 tokens_ctl=tc.get("visible_tool_tokens"),
@@ -235,6 +245,7 @@ def build():
         pe["delta_tokens"] = pe["tokens"] - pe["tokens_ctl"]
         pe["delta_adoption"] = pe["adoption"] - pe["adoption_ctl"]
         pe["treated"] = pe["fired"] | pe["fired_ctl"]
+        pe["delta_abstain"] = pe["abstained"] - pe["abstained_ctl"]
     pe.to_parquet(f"{FT}/paired_effects.parquet")
     print(f"[effects] paired_effects: {len(pe)} rows, "
           f"{pe['pair_id'].nunique() if len(pe) else 0} pairs")

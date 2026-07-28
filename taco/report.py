@@ -309,6 +309,17 @@ def main():
         A("\n**QUERY-LEVEL TOOL SELECTION**\n")
         A(md_table(ho[ho.label != "GLOBAL"]))
 
+    A("\n### Abstention vs reasoning\n")
+    if len(runs) and "abstention_rate" in runs:
+        ab = (runs[runs.kind.isin(["calibration", "heldout"])]
+              .groupby("model")[["abstention_rate", "answer_acc", "answered_rate"]]
+              .mean().reset_index())
+        A("A model that answers \"I need more information\" instead of guessing "
+          "scores 0 on a whitelist metric. A raw AnsAcc gap between two models can "
+          "therefore be an abstention gap rather than a reasoning gap, so both are "
+          "reported.\n")
+        A(md_table(ab))
+
     A("\n## 11. Failure analysis\n")
     A("* Tool laziness caps every intervention: on the per-task menu only 39/80 "
       "calibration tasks call any tool, on the forced 14-tool menu only 19/80. "

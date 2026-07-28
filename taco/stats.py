@@ -95,7 +95,9 @@ def effect_row(d, name, **extra):
     t = d[d["treated"]]
     mt, lot, hit = boot_ci(t["delta_acc"], t["task_id"]) if len(t) else (np.nan,) * 3
     dl = d["delta_ll"].dropna()
+    da = d["delta_abstain"] if "delta_abstain" in d else None
     return dict(name=name, n=len(d), n_treated=int(len(t)),
+                delta_abstain=(100 * float(da.mean()) if da is not None and len(da) else np.nan),
                 delta_acc=100 * m, ci_lo=100 * lo, ci_hi=100 * hi,
                 delta_acc_treated=100 * mt, ci_lo_treated=100 * lot,
                 ci_hi_treated=100 * hit,
