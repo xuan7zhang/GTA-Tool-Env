@@ -283,6 +283,26 @@ format×model, length×relevance, format×relevance, length×menu-size,
 format×menu-size, position×length, relevance×clutter, category×model,
 overlap×likelihood.
 
+## 4b. Execution log (deviations from §3, recorded as they happen)
+
+| when | event | effect on the plan |
+|---|---|---|
+| pre-Stage-1 | prediction keys are *positions* after `GTA_TASK_IDS` filtering, not dataset ids | fixed in `runner.per_task_outcomes`; the first pilot's numbers were discarded, not reported |
+| pre-Stage-1 | `X-GTA-Task-Id` never reaches the proxy (pre-existing: prior runs' logs also carry an empty task_id) | per-task attribution now via `GTA_CURTASK_FILE`; proxy reads it when the header is absent |
+| Stage 1 | **lmdeploy segfault** in `Sampling::Update()` under sustained `top_logprobs=20`; both lanes' LLMs died and every task returned a connection error | `GTA_LL_TOPK` lowered to 5, `start_llm_supervised.sh` restarts the server, and the runner **halts a lane** rather than record a serving failure as an accuracy effect (`conn_errors` in every record) |
+| Stage 1 | a second session began running this same code into `results/taco/` | `TACO_ROOT` added (`taco/paths.py`); this session writes to `results/taco_b/`, the default is left alone so the other session is unaffected |
+| Stage 2 setup | pairing key used the full block name, so blocks 2B/2C/2D had no control (their F0/L4 control lives in 2A) | key shortened to the stage prefix; length, mechanism and position blocks now pair correctly |
+| Stage 2 setup | `tool_exec_failures` was counting the by-design `unavailable` routing of GoogleSearch/MathOCR | split into `unavailable_calls` / `masked_calls` / real `tool_exec_failures` |
+| Stage 4 | empirical greedy cut from 3 stages (39 runs) to 2 (27 runs) | recorded here rather than reported as a full greedy search |
+
+**Stage 1 gate: PASSED.** 0 factual-preservation failures over 16 runs, 0
+connection errors, 14 paired conditions built, and at least one measurable
+effect (7B / minimal context / L2, treated +33.3 [8.3, 58.3]).
+
+**Analysis pipeline verified end to end on pilot data**: effects → stats →
+model → plots all run clean; TACO-Conditional grouped AUC 0.654 on pilot-only
+data (the Stage-3 gate is 0.60 on the full data, not on this).
+
 ## 5. Leakage rules (enforced mechanically, audited in Phase 0)
 
 1. The 149 held-out ids never enter feature fitting, hyperparameter choice,

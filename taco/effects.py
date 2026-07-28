@@ -154,8 +154,13 @@ def build():
     def block_key(r):
         menu = r.get("menu") or {}
         _, _, _, _, scope = spec_key(r.get("taco_spec"))
+        # Stage prefix only ("stage1"/"stage2"/"heldou"): blocks 2A-2D share
+        # one task set, one menu and one F0/L4 control, so keying on the full
+        # block name would leave the length, mechanism and position blocks
+        # with no control to pair against. Block 2E stays separate anyway --
+        # it has its own per-tool task set and scope.
         return (r.get("model"), menu.get("mode"), ",".join(sorted(menu.get("tools") or [])),
-                str(sorted(r_tasks(r))), scope, r.get("stage", "")[:7])
+                str(sorted(r_tasks(r))), scope, r.get("stage", "")[:6])
 
     def r_tasks(r):
         return sorted(int(k) for k in r["tasks"])
