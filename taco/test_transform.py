@@ -27,10 +27,9 @@ PRIMARY = ["OCR", "ImageDescription", "TextToBbox", "RegionAttributeDescription"
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--fixtures", default="/datasets/omni_pretraining/gta2/results/"
-                                          "taco/interventions/tool_output_fixtures.json")
-    ap.add_argument("--out", default="/datasets/omni_pretraining/gta2/results/"
-                                     "taco/phase0_audit/transform_validation.json")
+    from taco.paths import INTERV, AUDIT
+    ap.add_argument("--fixtures", default=f"{INTERV}/tool_output_fixtures.json")
+    ap.add_argument("--out", default=f"{AUDIT}/transform_validation.json")
     args = ap.parse_args()
 
     fx = json.load(open(args.fixtures))

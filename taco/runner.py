@@ -36,11 +36,10 @@ import sys
 import time
 import urllib.request
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from taco.paths import BIG, TACO, DS_PATH, TOOLMETA   # noqa: E402
+
 LAB = "/project/6101776/xzhan576/gta2-envlab"
-BIG = "/datasets/omni_pretraining/gta2"
-TACO = f"{BIG}/results/taco"
-DS_PATH = f"{BIG}/data/gta_dataset/dataset.json"
-TOOLMETA = f"{BIG}/data/gta_dataset/toolmeta.json"
 UNAVAILABLE = ["GoogleSearch", "MathOCR"]      # no API keys; symmetric everywhere
 
 LANE_PORTS = {1: dict(llm=12580, proxy=16281), 2: dict(llm=22580, proxy=26281)}
@@ -61,8 +60,14 @@ def iscorrect(pred: str, ref: dict) -> bool:
     return count == len(ref["whitelist"]) and not re.search(pat_bk, pred, re.IGNORECASE)
 
 
-def per_task_outcomes(pred_file: str, ds: dict) -> dict:
+def per_task_outcomes(pred_file: str, ds: dict, ids: list) -> dict:
     """Per-task primary + behavioural outcomes from one predictions file.
+
+    IMPORTANT: with GTA_TASK_IDS the dataset is filtered and then re-indexed,
+    so the prediction keys are *positions in the filtered dataset*, not
+    dataset ids. GTABenchDataset.load keeps ascending dataset order, so
+    position i corresponds to sorted(ids)[i]. Joining on the raw key instead
+    silently pairs each answer with another task's gold answer.
 
     Scoring replicates the evaluator: only the LAST message counts, and it
     must be an answer (not a tool call). Tasks whose gt_answer is null are
@@ -72,8 +77,13 @@ def per_task_outcomes(pred_file: str, ds: dict) -> dict:
     from the paired binary analysis and reported separately.
     """
     d = json.load(open(pred_file))
+    order = sorted(int(i) for i in ids)
+    if len(d) != len(order):
+        print(f"[taco] WARN predictions={len(d)} but task set={len(order)}; "
+              "positional mapping may be unreliable")
     out = {}
-    for k, v in d.items():
+    for pos, v in d.items():
+        k = str(order[int(pos)]) if int(pos) < len(order) else str(pos)
         p = v.get("prediction") or v.get("predictions")
         try:
             p = ast.literal_eval(p) if isinstance(p, str) else p
@@ -140,6 +150,34 @@ def set_proxy(port: int, cfg: dict):
     urllib.request.urlopen(req, timeout=60).read()
 
 
+def wait_llm(port: int, timeout_s: int = 900) -> bool:
+    """Block until the LLM endpoint answers.
+
+    The serving backend has segfaulted mid-lane (lmdeploy turbomind,
+    Sampling::Update); it is restarted by a supervisor, but a condition that
+    starts during the gap degrades into a run of connection-error answers that
+    looks like a real -- and catastrophic -- accuracy effect. Waiting here
+    keeps a serving crash from being silently recorded as a finding.
+    """
+    t0 = time.time()
+    while time.time() - t0 < timeout_s:
+        try:
+            urllib.request.urlopen(f"http://127.0.0.1:{port}/v1/models", timeout=5).read()
+            return True
+        except Exception:
+            time.sleep(10)
+    return False
+
+
+def health_of(wd: str) -> dict:
+    """Connection-error rate for a finished run, from its own log."""
+    p = f"{wd}/run.log"
+    if not os.path.exists(p):
+        return dict(conn_errors=0)
+    txt = open(p, errors="ignore").read()
+    return dict(conn_errors=txt.count("Got connection error"))
+
+
 def run_one(cond: dict, lane: int, model: str, splits: dict, ds: dict,
             all_tools: list, force: bool = False) -> dict:
     rid = cond["run_id"]
@@ -163,6 +201,9 @@ def run_one(cond: dict, lane: int, model: str, splits: dict, ds: dict,
                          f"set touches {len(set(ids) & held)} held-out ids")
 
     ports = LANE_PORTS[lane]
+    if not wait_llm(ports["llm"]):
+        raise SystemExit(f"LLM on port {ports['llm']} never came back; lane halted "
+                         f"before {rid} (refusing to record serving failure as data)")
     tlog = f"{wd}/transform.jsonl"
     llog = f"{wd}/ll.jsonl"
     for f in (tlog, llog, f"{wd}/proxy.jsonl"):
@@ -177,10 +218,15 @@ def run_one(cond: dict, lane: int, model: str, splits: dict, ds: dict,
         pool = list(all_tools)
         extra = ""
 
+    # per_tool_modes lets a condition realise the no-tool counterfactual
+    # (KeepNone) without breaking the ReAct harness, which needs a non-empty
+    # menu: the tools stay on the menu and every call returns 'unavailable'.
     set_proxy(ports["proxy"], dict(
-        mode="passthrough", mask=pool, per_tool_modes={}, phi_toolmeta=None,
+        mode=cond.get("proxy_mode", "passthrough"), mask=pool,
+        per_tool_modes=cond.get("proxy_modes") or {}, phi_toolmeta=None,
         unavailable_tools=UNAVAILABLE, log_path=f"{wd}/proxy.jsonl",
         taco_spec=cond.get("taco_spec"), taco_log_path=tlog,
+        curtask_file=f"{wd}/curtask.txt",
         run_meta=dict(run_id=rid, stage=cond.get("stage"), model=model)))
 
     env = dict(os.environ)
@@ -192,6 +238,7 @@ def run_one(cond: dict, lane: int, model: str, splits: dict, ds: dict,
         GTA_TASK_IDS=",".join(str(i) for i in ids),
         GTA_EXTRA_TOOLS=extra, GTA_HIDE_TOOLS="",
         GTA_LL_LOG=llog, GTA_ENGAGE_LOG=f"{wd}/engage.jsonl",
+        GTA_CURTASK_FILE=f"{wd}/curtask.txt",
         GTA_MAX_TURN="10",
     )
     if cond.get("predicted_mask"):
@@ -220,12 +267,27 @@ def run_one(cond: dict, lane: int, model: str, splits: dict, ds: dict,
         return rec
 
     metrics = json.load(open(res[-1]))
-    tasks = per_task_outcomes(pred[-1], ds)
+    tasks = per_task_outcomes(pred[-1], ds, ids)
+
+    # The proxy records the agent's *positional* task index (set_task_id), so
+    # map it back to the dataset id before joining, exactly as above.
+    order = sorted(int(i) for i in ids)
+
+    def to_id(pos):
+        try:
+            return str(order[int(pos)])
+        except (ValueError, TypeError, IndexError):
+            return None
 
     tl = [json.loads(x) for x in open(tlog) if x.strip()]
     by_task = {}
+    unattributed = 0
     for t in tl:
-        by_task.setdefault(str(t.get("task_id")), []).append(t)
+        k = to_id(t.get("task_id"))
+        if k is None:
+            unattributed += 1
+            continue
+        by_task.setdefault(k, []).append(t)
     for k, r in tasks.items():
         r.update(adoption(r, by_task.get(k, [])))
         tt = by_task.get(k, [])
@@ -244,6 +306,8 @@ def run_one(cond: dict, lane: int, model: str, splits: dict, ds: dict,
         stage=cond.get("stage"), kind=cond.get("kind"),
         label=cond.get("label", "GLOBAL"), notes=cond.get("notes", ""),
         menu=menu, taco_spec=cond.get("taco_spec"),
+        proxy_mode=cond.get("proxy_mode", "passthrough"),
+        proxy_modes=cond.get("proxy_modes") or {},
         predicted_mask=cond.get("predicted_mask"),
         n_tasks=len(ids), n_scored=len(scored),
         official_answer_acc=metrics.get("answer_acc"),
@@ -256,8 +320,18 @@ def run_one(cond: dict, lane: int, model: str, splits: dict, ds: dict,
         visible_tool_tokens=sum(r["visible_tool_tokens"] for r in tasks.values()),
         native_tool_tokens=sum(r["native_tool_tokens"] for r in tasks.values()),
         mean_tool_latency_s=(sum(lat) / len(lat)) if lat else None,
-        tool_exec_failures=sum(1 for p in px if p.get("status") not in (200, None)),
+        # Keep the two apart: GoogleSearch/MathOCR have no API key and are
+        # routed to 'unavailable' in EVERY condition (symmetric, by design), so
+        # counting them as execution failures would report a constant of the
+        # testbed as an infrastructure failure rate.
+        unavailable_calls=sum(1 for p in px if p.get("mode") == "unavailable"),
+        masked_calls=sum(1 for p in px if p.get("mode") == "masked"),
+        tool_exec_failures=sum(1 for p in px
+                               if p.get("tool") and p.get("status") not in (200, None)
+                               and p.get("mode") not in ("unavailable", "masked")),
         n_transform_records=len(tl),
+        **health_of(wd),
+        n_transform_unattributed=unattributed,
         transform_preservation_fail=sum(
             1 for x in tl if x.get("applied")
             and not (x.get("preservation") or {}).get("units_present", True)),

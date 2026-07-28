@@ -14,10 +14,9 @@ import json
 import os
 import random
 
-BIG = "/datasets/omni_pretraining/gta2"
-TACO = f"{BIG}/results/taco"
-CFG = f"{TACO}/configs"
-TOOLMETA = f"{BIG}/data/gta_dataset/toolmeta.json"
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from taco.paths import BIG, TACO, CFG, TOOLMETA   # noqa: E402
 
 # Tools whose output the intervention layer can act on (text output).
 # GoogleSearch / MathOCR have no API key -> proxy 'unavailable' in every

@@ -33,9 +33,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from taco import transform as T          # noqa: E402
 from taco import runner as R             # noqa: E402
 
-BIG = "/datasets/omni_pretraining/gta2"
-TACO = f"{BIG}/results/taco"
-OUT = f"{TACO}/phase0_audit"
+from taco.paths import BIG, TACO, AUDIT as OUT   # noqa: E402
 
 
 def check(results, name, ok, detail=""):

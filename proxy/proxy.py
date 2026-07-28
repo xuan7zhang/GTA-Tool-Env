@@ -81,6 +81,12 @@ STATE = {
     # None (default) => byte-identical behaviour to the pre-TACO proxy.
     "taco_spec": None,
     "taco_log_path": None,             # jsonl transformation log (Phase 1)
+    # Per-task attribution fallback. The X-GTA-Task-Id header does not survive
+    # the RemoteTool -> lagent wrapping in the chat() path (pre-existing: prior
+    # runs' proxy logs also carry an empty task_id), so the agent additionally
+    # publishes the current task to GTA_CURTASK_FILE. Evaluation is sequential
+    # (--max-num-workers 1), which makes a single pointer file unambiguous.
+    "curtask_file": None,
 }
 _openapi_cache = {"raw": None, "tool_output_types": {}}
 _log_lock = threading.Lock()
@@ -248,6 +254,11 @@ async def health():
 async def proxy(path: str, request: Request):
     tool = path.strip("/").split("/")[0]
     task_id = request.headers.get("x-gta-task-id", "")
+    if not task_id and STATE.get("curtask_file"):
+        try:
+            task_id = open(STATE["curtask_file"]).read().strip()
+        except OSError:
+            pass
     mode = _mode_for(tool)
     if STATE["mask"] is not None and tool not in STATE["mask"]:
         _log({"task_id": task_id, "tool": tool, "mode": "masked", "status": 404})

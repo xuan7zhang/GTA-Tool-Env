@@ -30,10 +30,12 @@ import json
 import os
 from collections import Counter
 
-BIG = "/datasets/omni_pretraining/gta2"
-DS = f"{BIG}/data/gta_dataset/dataset.json"
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from taco.paths import BIG, TACO, DS_PATH as DS   # noqa: E402
+
 PRIOR = f"{BIG}/results/tool_graph_facility/split.json"
-OUT = f"{BIG}/results/taco/splits.json"
+OUT = f"{TACO}/splits.json"
 
 # Derived coarse category: which perception/compute modality the reference
 # solution leans on. Analysis / stratification only -- never a model feature

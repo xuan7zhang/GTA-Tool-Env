@@ -31,6 +31,20 @@ if [ "${GTA_MACRO:-0}" = "1" ]; then
     echo "[toolserver] MACRO registered: $MACRO_NAMES"
 fi
 
+# Escape-hatch meta-tool (dynamic mask policy): register RequestTool when GTA_HATCH=1.
+HATCH_ARGS=""
+if [ "${GTA_HATCH:-0}" = "1" ]; then
+    HATCH_ARGS="--extra /datasets/omni_pretraining/gta2/scripts_extra/hatch_tools.py RequestTool"
+    echo "[toolserver] HATCH registered: RequestTool"
+fi
+
+# Optional experiment-local tools. Defaults empty, so historical launchers are unchanged.
+CUSTOM_ARGS=""
+if [ -n "${GTA_CUSTOM_TOOL_FILE:-}" ] && [ -n "${GTA_CUSTOM_TOOL_NAMES:-}" ]; then
+    CUSTOM_ARGS="--extra $GTA_CUSTOM_TOOL_FILE $GTA_CUSTOM_TOOL_NAMES"
+    echo "[toolserver] CUSTOM registered: $GTA_CUSTOM_TOOL_NAMES from $GTA_CUSTOM_TOOL_FILE"
+fi
+
 # --no-external-api mode: agentlego refuses to construct GoogleSearch/MathOCR
 # without keys. Register them with placeholder keys; the proxy routes them to
 # the 'unavailable' response (never forwards), and logs which tasks touch them.
@@ -45,4 +59,4 @@ fi
 
 exec env CUDA_VISIBLE_DEVICES=$GTA_TOOL_GPU agentlego-server start \
     --port "$GTA_TOOL_PORT" --host 0.0.0.0 \
-    --extra ./benchmark.py $POISON_ARGS $MACRO_ARGS $(cat "$TOOLLIST")
+    --extra ./benchmark.py $POISON_ARGS $MACRO_ARGS $HATCH_ARGS $CUSTOM_ARGS $(cat "$TOOLLIST")

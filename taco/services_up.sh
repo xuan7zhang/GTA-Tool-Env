@@ -14,7 +14,8 @@ set -euo pipefail
 export SLURM_CONF=${SLURM_CONF:-/cm/shared/apps/slurm/var/etc/killarney/slurm.conf}
 LAB=/project/6101776/xzhan576/gta2-envlab
 BIG=/datasets/omni_pretraining/gta2
-LOGD=$BIG/results/taco/logs
+export TACO_ROOT=${TACO_ROOT:-$BIG/results/taco_b}
+LOGD=$TACO_ROOT/logs
 mkdir -p "$LOGD"
 
 JOBID=$1; LANE=$2; MODEL_NAME=$3; MODEL_PATH=$4
@@ -28,7 +29,7 @@ fi
 ENVX="export SLURM_CONF=$SLURM_CONF GTA_LLM_GPUS=$LLM_GPU GTA_TOOL_GPU=$TOOL_GPU \
 GTA_LLM_PORT=$LLM_PORT GTA_TOOL_PORT=$TOOL_PORT GTA_PROXY_PORT=$PROXY_PORT \
 GTA_MODEL_NAME=$MODEL_NAME GTA_MODEL_PATH=$MODEL_PATH \
-GTA_PROXY_LOG=$BIG/results/taco/logs/proxy_lane$LANE.jsonl"
+GTA_PROXY_LOG=$TACO_ROOT/logs/proxy_lane$LANE.jsonl"
 
 up() {  # up <session> <script>
   tmux kill-session -t "$1" 2>/dev/null || true
@@ -37,7 +38,7 @@ up() {  # up <session> <script>
   echo "started tmux:$1 (lane $LANE) -> $2   log $LOGD/$1.log"
 }
 
-up "taco_llm$LANE"   start_llm.sh
+up "taco_llm$LANE"   start_llm_supervised.sh
 up "taco_tool$LANE"  start_toolserver.sh
 sleep 5
 up "taco_proxy$LANE" start_proxy.sh

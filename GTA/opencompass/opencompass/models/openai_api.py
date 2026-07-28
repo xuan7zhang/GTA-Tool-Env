@@ -237,7 +237,11 @@ class OpenAI(BaseAPIModel):
                 import os as _os
                 if _os.getenv('GTA_LL_LOG'):
                     data['logprobs'] = True
-                    data['top_logprobs'] = 20   # top-k for per-token entropy approx
+                    # top-k for the per-token entropy approximation. Kept low by
+                    # default: lmdeploy/turbomind segfaulted in Sampling::Update()
+                    # under sustained top_logprobs=20 (killed a TACO lane mid-run
+                    # on 2026-07-28). 5 still resolves the entropy/margin signals.
+                    data['top_logprobs'] = int(_os.getenv('GTA_LL_TOPK', '5'))
                 data = {**data, **self.gen_params}
                 raw_response = requests.post(self.url,
                                              headers=header,

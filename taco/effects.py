@@ -30,9 +30,9 @@ from collections import defaultdict
 import numpy as np
 import pandas as pd
 
-BIG = "/datasets/omni_pretraining/gta2"
-TACO = f"{BIG}/results/taco"
-FT = f"{TACO}/feature_tables"
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from taco.paths import BIG, TACO, FT   # noqa: E402
 
 CATEGORY = {
     "OCR": "text_extraction", "MathOCR": "text_extraction",
