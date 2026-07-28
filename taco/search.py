@@ -42,6 +42,7 @@ FORMATS = ["F0", "F1", "F2", "F3", "F4", "F5", "F6"]
 LENGTHS = ["L4", "L0", "L1", "L2", "L3", "L5"]
 BEAMS = [3, 5, 10]
 K_BUDGETS = [3, 5, 7, 9, 11, 14]
+MIN_MASK = min(K_BUDGETS)      # spec §19 mask budgets; |M|<3 is not in the space
 LAMBDA = float(os.environ.get("TACO_LAMBDA", "0.0"))   # cost weight, tokens/1k
 
 
@@ -111,15 +112,37 @@ class Utility:
                         if len(sf) else {})
         self.tok_by_size = (sf.groupby("menu_size")["visible_tool_tokens"].mean().to_dict()
                             if len(sf) else {})
+        self.sizes_observed = sorted(self.by_size) if self.by_size else []
+        self.extrapolated = False
 
     def acc_mask(self, M):
+        """Predicted absolute calibration accuracy of the mask M.
+
+        The mask term is fitted on the subset-design runs, which cover a
+        limited range of menu sizes. A linear model happily extrapolates
+        outside that range, and because the fitted menu-size coefficient is
+        negative it will always propose the smallest possible menu -- on the
+        pilot data that produced a degenerate |M|=1 "optimum" that no
+        evaluation supports. So: clamp the size feature to the observed range
+        and record that the clamp fired, rather than trusting an
+        extrapolation the data cannot back.
+        """
+        n = len(M)
+        if self.sizes_observed:
+            lo, hi = min(self.sizes_observed), max(self.sizes_observed)
+            if n < lo or n > hi:
+                self.extrapolated = True
         if self.mask_model is not None:
             f = mask_features(M, self.toolmeta)
+            if self.sizes_observed:
+                f["menu_size"] = float(min(max(f["menu_size"],
+                                               min(self.sizes_observed)),
+                                           max(self.sizes_observed)))
             X = pd.DataFrame([[f[c] for c in self.mask_model["features"]]],
                              columns=self.mask_model["features"])
             return float(self.mask_model["reg"].predict(X)[0])
         if self.by_size:
-            k = min(self.by_size, key=lambda s: abs(s - len(M)))
+            k = min(self.by_size, key=lambda s: abs(s - n))
             return float(self.by_size[k])
         return 0.0
 
@@ -143,7 +166,9 @@ class Utility:
         return base * mult * lmult
 
     def __call__(self, M, fmt="F0", length="L4"):
-        if not M:
+        # |M| < MIN_MASK is outside the declared search space (spec §19) and is
+        # also where the mask model is pure extrapolation.
+        if not M or len(M) < MIN_MASK:
             return -1e9
         u = self.acc_mask(M) + self.delta_phi(fmt, length, M)
         return u - self.lam * self.cost(M, fmt, length) / 1000.0
@@ -164,7 +189,7 @@ def greedy_forward(U, tools, kmax=14):
 def greedy_backward(U, tools):
     cur, traj = list(tools), [dict(step=len(tools), removed=None,
                                    tools=list(tools), utility=U(list(tools)))]
-    while len(cur) > 1:
+    while len(cur) > MIN_MASK:
         worst = max(cur, key=lambda t: U([x for x in cur if x != t]))
         cur = [x for x in cur if x != worst]
         traj.append(dict(step=len(cur), removed=worst, tools=list(cur), utility=U(cur)))
@@ -197,7 +222,7 @@ def random_search(U, tools, n=400, seed=0):
     rng = np.random.default_rng(seed)
     best, rows = None, []
     for i in range(n):
-        k = int(rng.integers(1, len(tools) + 1))
+        k = int(rng.integers(MIN_MASK, len(tools) + 1))
         M = sorted(rng.choice(tools, size=k, replace=False).tolist())
         u = U(M)
         rows.append(dict(tools=M, utility=u))
@@ -216,7 +241,7 @@ def coordinate_descent(U, tools, M0, rounds=3):
         best = (U(M, fmt, length), list(M))
         for t in tools:
             cand = [x for x in M if x != t] if t in M else sorted(M + [t])
-            if not cand:
+            if len(cand) < MIN_MASK:
                 continue
             u = U(cand, fmt, length)
             if u > best[0]:
@@ -228,8 +253,12 @@ def coordinate_descent(U, tools, M0, rounds=3):
 
 
 def topk_individual(U, tools, k):
-    """Global top-k by individual utility (a required baseline, not a search)."""
-    scores = {t: U([t]) for t in tools}
+    """Global top-k by individual utility (a required baseline, not a search).
+
+    Scored at the smallest admissible menu rather than as a singleton, since
+    a singleton menu is outside the search space.
+    """
+    scores = {t: U(sorted({t} | set(tools[:MIN_MASK - 1]) - {t})) for t in tools}
     keep = sorted(sorted(scores, key=lambda t: -scores[t])[:k])
     return dict(tools=keep, utility=U(keep), individual_scores=scores)
 
@@ -272,10 +301,14 @@ def main():
             if res["beam"][str(b)]:
                 cands.append(max(res["beam"][str(b)],
                                  key=lambda r: r["best_utility"])["best_tools"])
+        cands = [c for c in cands if len(c) >= MIN_MASK] or [sorted(tools)]
         start = max(cands, key=lambda M: U(M))
         cd, cd_traj = coordinate_descent(U, tools, start)
         res["coordinate_descent"] = dict(best=cd, trajectory=cd_traj)
         res["empirical_best_observed"] = empirical_from_runs(runs, model)
+        res["mask_model_sizes_observed"] = U.sizes_observed
+        res["mask_model_extrapolated"] = bool(U.extrapolated)
+        res["min_mask_size_enforced"] = MIN_MASK
         res["selected"] = cd
         out[model] = res
         print(f"[search] {model}: selected |M|={len(cd['tools'])} "

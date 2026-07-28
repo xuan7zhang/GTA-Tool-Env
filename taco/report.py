@@ -281,6 +281,10 @@ def main():
               f"format {sel.get('format')} length {sel.get('length')}, "
               f"predicted utility {sel.get('utility')}\n")
             A(f"  * tools: `{','.join(sel.get('tools', []))}`\n")
+            A(f"  * mask-model menu sizes observed on calibration: "
+              f"{r.get('mask_model_sizes_observed')}; minimum admissible |M| "
+              f"{r.get('min_mask_size_enforced')}; extrapolation clamp fired: "
+              f"{r.get('mask_model_extrapolated')}\n")
             emp = r.get("empirical_best_observed")
             if emp:
                 A(f"  * best environment actually observed on calibration: "
@@ -374,8 +378,11 @@ def main():
     print("=" * 72)
     print(f" 1. stages completed        : {json.dumps(stages_done)}")
     print(f" 2. models evaluated        : {sorted(runs.model.dropna().unique()) if len(runs) else []}")
+    ta_p = f"{FT}/tool_attributes.parquet"
+    ta = pd.read_parquet(ta_p) if os.path.exists(ta_p) else pd.DataFrame()
     print(f" 3. tools intervened on     : "
-          f"{sorted(pe.scope.unique()) if len(pe) else []}")
+          f"{sorted(ta.tool.unique()) if len(ta) else []}")
+    print(f"    intervention scopes     : {sorted(pe.scope.unique()) if len(pe) else []}")
     print(f" 4. paired executions       : {len(pe)} task-level pairs "
           f"across {pe['pair_id'].nunique() if len(pe) else 0} condition pairs")
     sf_ = (stats or {}).get("summary", {})
