@@ -41,54 +41,92 @@ OpenAI-compatible `/v1/completions` endpoint with `echo=True, max_tokens=0,
 logprobs=20` — this returns per-token logprobs for the whole echoed prompt,
 including the appended candidate name, so we slice out just the candidate's
 own tokens via character offset and take the mean per-token logprob (ranking
-metric, matches `token_metrics.py`'s own mean-logprob convention) and the
-mean top-k entropy at those positions. Rank all candidates per task by mean
-logprob, descending.
+metric) and the mean top-k entropy at those positions. Rank all candidates
+per task by mean logprob, descending.
 
-**Free-generation baseline (context only, not the object of study).** One
-unconstrained completion of `Action:` per task (temperature 0), string-matched
-against candidate names — answers "does the model already solve this without
-any forced scoring," to contextualize whether the forced-scoring result is
-doing real work or riding a ceiling.
+**Name-blinding ablation.** Same method, but every candidate's literal name
+in both the function list and the scored continuation is replaced with
+`func_1..func_N` (description and parameter schema untouched). Tests whether
+the signal is genuine reasoning over the task/description match, or just
+lexical pattern-matching between the query and a suggestively-named function
+(e.g. a query about weather scoring `get_weather` high just because the
+words overlap, independent of whether it's actually the right tool).
+
+**Two baselines, for cost/benefit context, not the object of study:**
+- *Free-generation*: one unconstrained completion of `Action:` per task
+  (temperature 0), matched against candidate names (exact string match,
+  substring in either direction, or unambiguous short-form match e.g.
+  `get_rate` for `currency_conversion.get_rate`) — does the model already
+  solve this without any forced scoring?
+- *Token overlap*: zero-inference baseline — rank candidates by
+  `|words(query) ∩ words(name + description)|`, ties split credit. Cheapest
+  possible no-GT selector, analogous in spirit to `relevance_selector.py`'s
+  embedding signal but requiring no model at all.
 
 Implementation: `experiments/bfcl_token_likelihood/score_candidates.py`
-(scoring) + `summarize.py` (pooled metrics). Fetch script:
-`experiments/bfcl_token_likelihood/fetch_data.sh`.
+(scoring, `--anonymize` flag for the ablation) + `summarize.py` (pooled
+metrics). Fetch script: `experiments/bfcl_token_likelihood/fetch_data.sh`.
 
 ## Results (all 200 tasks, single seed)
 
-| Metric | Value |
-|---|---:|
-| Top-1 accuracy, forced-scoring (highest-likelihood candidate = GT) | **98.5%** |
-| MRR, forced-scoring | 0.9925 |
-| Pooled AUROC (mean logprob vs. is-GT, 557 candidate-task pairs) | **0.9977** |
-| Random-guess baseline (mean of 1/n_candidates per task) | 38.4% |
-| Free-generation baseline (unconstrained, no forced scoring) | 94.5% |
-| Mean candidate-set entropy (softmax over per-candidate scores) when top-1 correct | 0.204 nats |
-| Mean candidate-set entropy when top-1 **wrong** | 0.630 nats |
-| Pearson r, normalized entropy vs. top-1 correctness | −0.247 |
+| Signal | Top-1 accuracy | Mean within-task AUROC¹ | MRR |
+|---|---:|---:|---:|
+| **Forced-scoring, real names** | 98.5% (197/200) | 0.9900 | 0.9925 |
+| **Forced-scoring, names anonymized (`func_1..func_N`)** | **100.0% (200/200)** | 1.0000 | 1.0000 |
+| Free-generation (unconstrained, context only) | 95.0% (190/200) | — | — |
+| Token-overlap, no model, context only | 92.7%² | — | — |
+| Random guessing | 38.4% | 0.500 | — |
 
-An 80-task subset (first 80 tasks, which happened to skew toward 2–3
-candidates rather than the full 2–4 range) gave consistent numbers: top-1
-97.5%, AUROC 0.995, MRR 0.9875, free-gen 92.5% — included for reference in
-`runtime/bfcl_token_likelihood_pilot_20260811/summary.json`.
+¹ Mean over tasks of the within-task pairwise AUROC (GT's score vs. every
+distractor *in the same task*). Reported instead of a naive pooled AUROC
+across all 557 candidate-task pairs — pooling scores GT candidates against
+distractors drawn from *other* tasks too, which are separable on absolute
+likelihood scale for reasons that have nothing to do with tool selection
+(that inflated number was 0.9977; it's noted here only to flag it as the
+wrong metric, not to lead with it).
+² With split credit on the 21/200 tasks with tied top overlap scores.
 
-**Headline: on this category, token likelihood recovers the GT tool almost
-perfectly (AUROC 0.998) and beats the free-generation baseline (98.5% vs.
-94.5%).** The 3 failures (of 200) all have small likelihood gaps between the
-top pick and GT (e.g. −0.36 vs. −0.985 nats, −0.094 vs. −1.872 nats) and sit
-in the high-entropy tail — the signal is not just accurate, it is also
-reasonably well-calibrated about when it's likely to be wrong.
+**Headline: token likelihood recovers the GT tool almost perfectly** on this
+category (98.5–100% top-1, depending on whether names are shown), clearing
+both the free-generation baseline (95.0%) and a zero-inference token-overlap
+baseline (92.7%). The forced-scoring/free-generation gap is modest but real
+(7–8 tasks) — this is not primarily a parsing artifact: the free-gen matcher
+was checked against all "wrong" cases by hand, and most really are the model
+outputting a wrong tool or a non-answer (`"function_call"`, `"Function 1"`),
+not a name-matching failure on the scorer's side.
+
+**Name-blinding ablation result (the important check): the signal survives,
+and in fact improves, when literal tool names are hidden.** This rules out
+the most obvious failure mode — that "high likelihood" is just detecting
+superficial lexical overlap between the query and a suggestively-named tool
+(e.g. picking `get_weather` for a weather query independent of whether it's
+actually correct). With names replaced by opaque `func_i` labels, the model
+still has to route based on the *description text* to name the right index,
+and it does that with zero errors across all 200 tasks. (The improvement
+from 98.5%→100% is plausibly partly a measurement-noise effect too — `func_i`
+labels are uniform-length across candidates, removing the variable
+subword-tokenization-length confound that real names of different lengths
+introduce into the mean-logprob estimate — but either way, the finding that
+motivated running this check is confirmed: it is not lexical-name-matching.)
+
+A position-bias check (does the signal work by favoring whichever position
+GT happens to sit in, rather than reading the task) also came back clean:
+GT position in the candidate list is close to uniform (73/71/42/14 across
+positions 0–3) and top-1 accuracy is flat across positions (0.986 / 0.986 /
+0.976 / 1.000) — no exploitable positional prior. A ranking-normalization
+check (`mean_logprob` vs `sum_logprob` per candidate) also came back clean:
+0/200 tasks flip their top-1 pick between the two normalizations.
 
 ## This is the opposite conclusion from the GTA/Shapley pilot — read the gap, don't average it away
 
 `analysis/reports/TOKEN_LIKELIHOOD_SHAPLEY_QWEN3VL_20260804.md` found
 essentially **no relationship** (r ≈ −0.06 to −0.16) between token likelihood
 and a tool's causal contribution (Shapley value) on GTA. This pilot finds a
-**strong** relationship (AUROC 0.998) between token likelihood and whether a
-candidate is the GT tool on BFCL. Both are real, single-seed, small-n
-findings from the same model family — the likely reason they diverge is a
-genuine task-structure difference, not noise:
+**strong** relationship (top-1 98.5–100%, within-task AUROC 0.99–1.00)
+between token likelihood and whether a candidate is the GT tool on BFCL. Both
+are real, single-seed, small-n findings from the same model family — the
+likely reason they diverge is a genuine task-structure difference, not
+noise:
 
 - **GTA/Shapley** measures confidence in *proposing a JSON tool call* inside a
   multi-turn ReAct trajectory, and correlates it against *how much that tool's
@@ -109,14 +147,12 @@ pilot only speaks to the first one.
 
 ## Caveats (single pilot, read narrowly)
 
-- **Ceiling effect.** Both the forced-scoring method (98.5%) and the naive
-  free-generation baseline (94.5%) are near-ceiling on this category with an
+- **Ceiling effect.** Both the forced-scoring method (98.5–100%) and the
+  free-generation baseline (95.0%) are near-ceiling on this category with an
   8B instruct model — the category may simply be easy (2–4 candidates,
-  semantically distinct names like `walmart.vegan_products` vs.
-  `safeway.vegan_products`). This limits how much the pilot can say about
-  whether likelihood adds value over just asking the model directly; the gap
-  (98.5% vs. 94.5%, i.e. forced-scoring recovers 4 of 200 cases free-gen
-  missed) is the real but modest signal, not the headline AUROC.
+  usually semantically distinct). This limits how much the pilot can say
+  about incremental value over just asking the model directly; the gap is
+  real (7–8 of 200 cases) but small in absolute terms.
 - **Single category, single model, single seed.** Only BFCL v1 `multiple`
   (2–4 candidates) was tested. `parallel_multiple` (more candidates, multiple
   correct) and `simple` (only 1 candidate, no selection problem) would be
@@ -132,11 +168,13 @@ pilot only speaks to the first one.
   correctness — it only tests whether likelihood identifies the right
   *function name* among candidates, the first half of BFCL's own AST-match
   scoring (which also checks arguments).
-- Entropy here is entropy over the *candidate set* (softmax of per-candidate
-  mean logprobs), not the per-token entropy `token_metrics.py` logs during
-  natural generation — a different quantity from the GTA reports, chosen
-  because it directly answers "how uncertain is the ranking," not "how
-  uncertain was any single token."
+- Entropy reported (`candidate_entropy_nats`) is entropy over the *candidate
+  set* (softmax of per-candidate mean logprobs), not the per-token entropy
+  `token_metrics.py` logs during natural generation — a different quantity
+  from the GTA reports, chosen because it directly answers "how uncertain is
+  the ranking," not "how uncertain was any single token." It behaves
+  sensibly: 0.20 nats mean when top-1 is correct vs. 0.63 nats when wrong
+  (r = −0.25 between normalized entropy and top-1 correctness).
 
 ## Suggested next step
 
@@ -153,5 +191,5 @@ selectors in `experiments/relevance_selector.py` and
 
 - Code: `experiments/bfcl_token_likelihood/{fetch_data.sh,score_candidates.py,summarize.py}`
 - Raw data: `runtime/bfcl_v1_pilot_data/{questions,answers}.json`
-- Per-task scored output: `runtime/bfcl_token_likelihood_pilot_20260811/{scored_full200,scored}.jsonl`
-- Pooled summaries: `runtime/bfcl_token_likelihood_pilot_20260811/{summary_full200,summary}.json`
+- Per-task scored output: `runtime/bfcl_token_likelihood_pilot_20260811/scored_full200{,_anonymized}.jsonl`
+- Pooled summaries: `runtime/bfcl_token_likelihood_pilot_20260811/summary_full200{,_anonymized}.json`

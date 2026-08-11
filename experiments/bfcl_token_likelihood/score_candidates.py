@@ -45,21 +45,31 @@ def read_jsonl(path):
         return [json.loads(line) for line in handle if line.strip()]
 
 
-def function_block(fn, idx):
+def function_block(fn, idx, display_name=None):
     params = json.dumps(fn.get('parameters', {}), ensure_ascii=False)
-    return (f"Function {idx}: {fn['name']}\n"
+    return (f"Function {idx}: {display_name or fn['name']}\n"
             f"Description: {fn.get('description', '')}\n"
             f"Parameters: {params}")
 
 
-def build_prefix(task):
+def anonymized_names(task):
+    """func_1..func_N in the same order as task['function'] -- description
+    and params are untouched, only the literal name string is hidden. Used
+    for the name-blinding ablation: if the likelihood signal survives this,
+    it isn't just matching the query text against the tool's literal name."""
+    return {fn['name']: f'func_{i + 1}' for i, fn in enumerate(task['function'])}
+
+
+def build_prefix(task, anonymize=False):
     """Shared context every candidate is scored against. Ends in 'Action:'
     with no trailing space -- the space + candidate name is appended per
     candidate so the character offset split is unambiguous."""
     turns = task['question'][0] if isinstance(task['question'][0], list) else task['question']
     user_text = '\n'.join(t['content'] for t in turns if t.get('role') == 'user')
+    name_map = anonymized_names(task) if anonymize else {}
     functions = '\n\n'.join(
-        function_block(fn, i + 1) for i, fn in enumerate(task['function']))
+        function_block(fn, i + 1, name_map.get(fn['name']))
+        for i, fn in enumerate(task['function']))
     return (
         'You have access to the following functions. Given the user request, '
         'decide which single function should be called next.\n\n'
@@ -173,18 +183,20 @@ def softmax_entropy_nats(logprobs):
     return -sum(p * math.log(p) for p in probs if p > 0.0)
 
 
-def score_task(client, task, answer):
-    prefix = build_prefix(task)
+def score_task(client, task, answer, anonymize=False):
+    prefix = build_prefix(task, anonymize=anonymize)
     gt_name = next(iter(answer['ground_truth'][0].keys()))
+    name_map = anonymized_names(task) if anonymize else {}
     candidates = [fn['name'] for fn in task['function']]
+    score_names = [name_map.get(name, name) for name in candidates]
 
     scored = []
-    for name in candidates:
-        result = client.score_continuation(prefix, ' ' + name)
+    for real_name, score_name in zip(candidates, score_names):
+        result = client.score_continuation(prefix, ' ' + score_name)
         if result is None:
             continue
-        result['name'] = name
-        result['is_gt'] = (name == gt_name)
+        result['name'] = real_name
+        result['is_gt'] = (real_name == gt_name)
         scored.append(result)
     if not scored:
         return None
@@ -193,7 +205,9 @@ def score_task(client, task, answer):
     rank_of_gt = next((i + 1 for i, r in enumerate(ranked) if r['is_gt']), None)
 
     free_text = client.free_generate(prefix)
-    free_choice = parse_free_choice(free_text, candidates)
+    free_choice_raw = parse_free_choice(free_text, score_names)
+    free_choice = (candidates[score_names.index(free_choice_raw)]
+                   if free_choice_raw in score_names else None)
 
     return dict(
         task_id=task['id'],
@@ -220,6 +234,11 @@ def main():
     ap.add_argument('--n-tasks', type=int, default=80)
     ap.add_argument('--workers', type=int, default=6)
     ap.add_argument('--out', required=True)
+    ap.add_argument('--anonymize', action='store_true',
+                     help='Replace function names with func_1..func_N '
+                          '(description/params kept) -- name-blinding '
+                          'ablation to check the signal is not just '
+                          'lexical match between query and tool name.')
     args = ap.parse_args()
 
     data_dir = Path(args.data_dir)
@@ -236,7 +255,7 @@ def main():
 
     def _run(task):
         answer = answers[task['id']]
-        return score_task(client, task, answer)
+        return score_task(client, task, answer, anonymize=args.anonymize)
 
     with out_path.open('w', encoding='utf-8') as handle, \
             ThreadPoolExecutor(max_workers=args.workers) as pool:
