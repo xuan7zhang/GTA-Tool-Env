@@ -1,0 +1,21 @@
+{
+  "n_tasks": 80,
+  "n_candidates_mean": 2.5125,
+  "n_candidates_min": 2,
+  "n_candidates_max": 3,
+  "top1_accuracy_forced_scoring": 0.975,
+  "mrr_forced_scoring": 0.9875,
+  "random_baseline_accuracy": 0.4145833333333332,
+  "free_generation_accuracy": 0.925,
+  "pooled_auroc_score_vs_is_gt": 0.9946280991735538,
+  "n_scored_candidate_pairs": 201,
+  "mean_candidate_entropy_when_top1_correct": 0.18429988425411892,
+  "mean_candidate_entropy_when_top1_wrong": 0.5236824746003181,
+  "n_top1_correct": 78,
+  "n_top1_wrong": 2,
+  "pearson_normalized_entropy_vs_top1_correct": -0.2737355726294633,
+  "rank_of_gt_distribution": {
+    "1": 78,
+    "2": 2
+  }
+}
