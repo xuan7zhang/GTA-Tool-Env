@@ -67,6 +67,46 @@ Implementation: `experiments/bfcl_token_likelihood/score_candidates.py`
 (scoring, `--anonymize` flag for the ablation) + `summarize.py` (pooled
 metrics). Fetch script: `experiments/bfcl_token_likelihood/fetch_data.sh`.
 
+## Exact settings
+
+| Setting | Value |
+|---|---|
+| Model | Qwen3-VL-8B-Instruct |
+| Serving | vLLM, OpenAI-compatible, `http://127.0.0.1:8013/v1`, served-model-name `gpt-qwen3-vl-8b` (already running on this host for other work; not started by this pilot) |
+| Endpoint used for scoring | `POST /v1/completions` |
+| Scoring request params | `echo=True, max_tokens=0, logprobs=20` |
+| Free-gen baseline params | `POST /v1/completions`, `max_tokens=24, temperature=0.0, stop=["\n"]` |
+| Data | `gorilla-llm/Berkeley-Function-Calling-Leaderboard` (HF), `BFCL_v3_multiple.json` + `possible_answer/BFCL_v3_multiple.json` — all 200 tasks, no sampling/filtering |
+| Concurrency | `ThreadPoolExecutor`, 8 workers, sequential HTTP calls |
+| Runtime | ~13s for 80 tasks, ~30s for 200 tasks (this server, shared with other jobs) |
+
+**Where exactly the scored tokens sit — before the tool call, only the name span, nothing else.**
+Every candidate is scored against the *same* shared prefix (function list +
+user request + `Thought: ...\nAction:`); only the text appended after
+`Action:` differs per candidate, and only that appended span's tokens are
+read out of the response. Concretely, for `multiple_1`:
+
+```
+[... 3-function list, user request, Thought: ... ]
+Action:                              <- prefix ends here (identical for all 3 candidates)
+        math.triangle_area_heron     <- scored tokens for candidate 1 (≈5 sub-word tokens)
+        math.circle_area             <- scored tokens for candidate 2 (≈3 sub-word tokens)
+        math.triangle_area_base_height  <- scored tokens for candidate 3 (≈6 sub-word tokens)
+```
+
+The split is done by character offset (`text_offset >= len(prefix)` in the
+vLLM completions response), not by re-tokenizing separately, so it's exact
+regardless of how the tokenizer merges the leading space into the first
+sub-word. This is **only the function-name span** — no arguments, no tool
+execution, no observation, no final answer. It is the direct analogue of
+`token_metrics.py`'s `before_tool` phase in the GTA infra, narrowed further
+to just the name (GTA's `before_tool` phase covers the whole `Action: name\n
+Action Input: {...}` block). There is no `after_tool` / `final_answer` phase
+in this pilot at all — BFCL's `multiple` category is single-shot,
+non-executable, AST-scored; no tool is ever actually called, so that phase
+doesn't exist here (unlike the GTA/`token_metrics.py` setup, which does log
+both phases across a live multi-turn ReAct loop).
+
 ## Results (all 200 tasks, single seed)
 
 | Signal | Top-1 accuracy | Mean within-task AUROC¹ | MRR |
@@ -145,6 +185,51 @@ actually mattered for getting the task right"** (a causal-attribution
 framing). Both are reasonable readings of "optimize the tool space" — this
 pilot only speaks to the first one.
 
+## Per-candidate token likelihood: correct tool vs. incorrect tool
+
+The AUROC/top-1 numbers above are aggregates; this is the group-level
+statistic underneath them — pooling every scored candidate across all 200
+tasks into two buckets, "is the ground-truth tool" vs. "is a distractor",
+and reporting `mean_logprob` for each bucket separately. Reproduce with
+`experiments/bfcl_token_likelihood/gt_vs_distractor_breakdown.py`; raw
+numbers in `runtime/bfcl_token_likelihood_pilot_20260811/gt_vs_distractor_breakdown.json`.
+
+**Real tool names:**
+
+| Group | n | mean logprob | std | min | max |
+|---|---:|---:|---:|---:|---:|
+| Correct tool (GT) | 200 | **−0.144** | 0.297 | −1.872 | −0.0002 |
+| Incorrect tool (distractor) | 357 | **−5.211** | 2.835 | −26.505 | −0.095 |
+| Gap (correct − incorrect) | | **+5.07 nats** | | | |
+
+**Names anonymized (`func_1..func_N`):**
+
+| Group | n | mean logprob | std | min | max |
+|---|---:|---:|---:|---:|---:|
+| Correct tool (GT) | 200 | **−0.201** | 0.142 | −0.814 | −0.015 |
+| Incorrect tool (distractor) | 357 | **−4.267** | 0.619 | −6.505 | −0.856 |
+| Gap (correct − incorrect) | | **+4.07 nats** | | | |
+
+In both settings the two groups are almost non-overlapping: in nats, −0.14
+vs. −5.21 is roughly the difference between the model assigning the correct
+tool ~87% probability on average and a distractor ~0.5–1% — a two-order-of-
+magnitude gap, which is why a simple threshold on this one number separates
+the groups almost perfectly (this is the same fact the AUROC/top-1 numbers
+above are reporting, just as raw probabilities instead of a ranking metric).
+
+**Per-token entropy along that same span does *not* separate the groups**
+(0.168 vs. 0.187 nats real-names; 0.447 vs. 0.425 nats anonymized — both
+pairs within noise of each other). Entropy at a token position measures "how
+many other tokens could plausibly continue from here," and a tool name is
+close to lexically unique in the vocabulary either way (correct or wrong),
+so local per-token entropy along the forced path carries almost no signal
+about whether the *whole name* is the right choice. The signal lives in the
+**joint probability of the whole name span** (`mean_logprob`, i.e.
+likelihood), not in per-token local uncertainty (`entropy`) — this is the
+practical reason the pilot ranks candidates by mean logprob and only uses
+entropy as a secondary/calibration check (candidate-set-level entropy, see
+Caveats below, not this per-token entropy).
+
 ## Caveats (single pilot, read narrowly)
 
 - **Ceiling effect.** Both the forced-scoring method (98.5–100%) and the
@@ -189,7 +274,8 @@ selectors in `experiments/relevance_selector.py` and
 
 ## Artifacts
 
-- Code: `experiments/bfcl_token_likelihood/{fetch_data.sh,score_candidates.py,summarize.py}`
+- Code: `experiments/bfcl_token_likelihood/{fetch_data.sh,score_candidates.py,summarize.py,gt_vs_distractor_breakdown.py}`
 - Raw data: `runtime/bfcl_v1_pilot_data/{questions,answers}.json`
 - Per-task scored output: `runtime/bfcl_token_likelihood_pilot_20260811/scored_full200{,_anonymized}.jsonl`
 - Pooled summaries: `runtime/bfcl_token_likelihood_pilot_20260811/summary_full200{,_anonymized}.json`
+- GT-vs-distractor breakdown: `runtime/bfcl_token_likelihood_pilot_20260811/gt_vs_distractor_breakdown.json`

@@ -1,0 +1,34 @@
+[
+  {
+    "n_gt": 200,
+    "n_distractor": 357,
+    "gt_mean_logprob": -0.14376424694300113,
+    "gt_std_logprob": 0.29648956488349754,
+    "gt_min_logprob": -1.871592402445458,
+    "gt_max_logprob": -0.00016528925201697575,
+    "distractor_mean_logprob": -5.210851909064074,
+    "distractor_std_logprob": 2.8348671583224916,
+    "distractor_min_logprob": -26.50518226623535,
+    "distractor_max_logprob": -0.0944891870018818,
+    "gap_nats": 5.0670876621210725,
+    "gt_mean_entropy_nats": 0.1675497076719961,
+    "distractor_mean_entropy_nats": 0.18671486026097842,
+    "source": "runtime/bfcl_token_likelihood_pilot_20260811/scored_full200.jsonl"
+  },
+  {
+    "n_gt": 200,
+    "n_distractor": 357,
+    "gt_mean_logprob": -0.2013154732193951,
+    "gt_std_logprob": 0.14158475332097223,
+    "gt_min_logprob": -0.8138035336311683,
+    "gt_max_logprob": -0.015283455226684358,
+    "distractor_mean_logprob": -4.267394701688157,
+    "distractor_std_logprob": 0.6191027658610367,
+    "distractor_min_logprob": -6.505124509320619,
+    "distractor_max_logprob": -0.855470200297835,
+    "gap_nats": 4.0660792284687615,
+    "gt_mean_entropy_nats": 0.4472398192246718,
+    "distractor_mean_entropy_nats": 0.4251342936748502,
+    "source": "runtime/bfcl_token_likelihood_pilot_20260811/scored_full200_anonymized.jsonl"
+  }
+]
