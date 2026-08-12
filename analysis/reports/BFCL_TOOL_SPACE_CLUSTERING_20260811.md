@@ -129,6 +129,68 @@ dataset's own structure — 107 of the 233 exact-candidate-set groups in the
 full dataset occur in only one task each, i.e. roughly 10% of tasks really
 are one-off, not clusterable by tool overlap at all.
 
+## Fix: DBSCAN instead of forcing every task into a k-means bucket
+
+Cluster 26 is a k-means-specific artifact, not a fact about the data: k-means
+must assign **every** point to one of K clusters, so a task whose tool set
+barely overlaps with anything else still gets pulled to whichever centroid
+happens to be nearest — even when that fit is bad. Checked directly: of
+cluster 26's 122 tasks, only 9 actually contain one of the cluster's own
+"top 5 tools" (the `multiply`/`add`/`fahrenheit_to_celsius` math-utility
+group, which is really its own small 7-9-task cluster, not 122 tasks' worth
+of signal); 19/122 have candidate tools that appear in *no other task in the
+dataset at all*. The "top tools" label was never representative — it's just
+the most frequent tools among an otherwise unrelated leftover group.
+
+**DBSCAN** (density-based clustering) fixes this directly: it explicitly
+labels points that don't belong to any sufficiently dense region as
+**noise** (cluster `-1`) instead of forcing them into the nearest cluster.
+Same feature vectors, cosine distance (`cosine_distances` on the same
+L2-normalized multi-hot vectors), `eps` swept:
+
+| eps | Clusters | Noise | Noise % |
+|---:|---:|---:|---:|
+| 0.15 | 75 | 191 | 18.2% |
+| 0.20 | 63 | 171 | 16.3% |
+| 0.25 | 58 | 156 | 14.8% |
+| **0.30** | **34** | **148** | **14.1%** |
+| 0.35 | 33 | 143 | 13.6% |
+| 0.40 | 24 | 139 | 13.2% |
+
+`eps=0.3, min_samples=4` picked for a cluster count comparable to the
+k-means run (34 vs. 40) — not separately tuned beyond this sweep.
+
+**Before / after** (same coherence metric — `n_distinct_gt_tools / n_tasks`
+per cluster — applied to both):
+
+| | k-means (K=40) | DBSCAN (eps=0.3) |
+|---|---:|---:|
+| Coherent clusters / tasks | 21 / 682 | 12 / 677 |
+| Mixed clusters / tasks | 15 / 230 | 17 / 195 |
+| **Incoherent clusters / tasks** | **4 / 140** | **5 / 32** |
+| Explicit "no good cluster" (noise) | 0 (forced into incoherent bins) | 148 (14.1%, honestly labeled) |
+
+The coherent-task count barely moved (682 → 677) — DBSCAN isn't
+"discovering" fewer good clusters, it's **correctly refusing to manufacture
+fake ones**: the 140 incoherent k-means tasks mostly weren't wrong so much
+as unclusterable, and DBSCAN now says so directly (148 noise) instead of
+hiding them inside a misleadingly-labeled cluster 26. Incoherent-task count
+dropped 140 → 32, a real improvement, not just relabeling — DBSCAN also
+merged some domains k-means had artificially split apart: its largest
+cluster is 268 tasks (likely folding several of k-means's separate
+media/music-adjacent clusters — 8, 25, 1, 20 — into one), well above
+k-means's largest *legitimate* cluster of 62 (cluster 8). K-means is
+constrained to roughly-equal-sized Voronoi-like cells by construction
+(forcing exactly K partitions of comparable pull), which both artificially
+splits large natural domains and creates the leftover-bin problem for
+small ones; DBSCAN has neither constraint.
+
+**Practical implication for the two-tier design below**: the noise bucket
+*is* the honest answer to "which tasks can't be served by an offline
+domain-cache lookup" — 14.1% needing the online fallback path, not the 13.3%
+k-means implied *plus* however many of its "coherent"-looking clusters were
+secretly less clean than they looked.
+
 ## Why this matters for tool-space optimization
 
 The forced-scoring / pool-subset experiments both re-rank a task's full
@@ -170,8 +232,22 @@ would be the natural next experiment.
   tasks for clustering to be meaningful); `multiple`'s 200 tasks are
   hand-designed to be mostly domain-distinct from each other and weren't
   clustered.
+- **DBSCAN's `eps=0.3` / `min_samples=4` were picked from a 6-point sweep
+  for a cluster count comparable to the k-means run, not independently
+  tuned or validated** — the noise-percentage curve (18.2% → 13.2% across
+  the swept range) shows the noise/cluster-count tradeoff is fairly
+  continuous, not a sharp elbow either.
+- Both methods share the same underlying representational choice (multi-hot
+  vector over exact function names, L2-normalized, cosine-like distance) —
+  neither accounts for *semantic* similarity between differently-named
+  tools that do similar things, which a description-embedding-based
+  distance (e.g. reusing this repo's `relevance_selector.py` embeddings)
+  might cluster differently.
 
 ## Artifacts
 
 - Code: `experiments/bfcl_token_likelihood/cluster_tasks_by_tool_space.py`
-- Full cluster assignments (all 40, with task IDs): `runtime/bfcl_live_multiple_data/kmeans_k40_clusters.json`
+  (`--method kmeans` or `--method dbscan`)
+- K-means (K=40) cluster assignments: `runtime/bfcl_live_multiple_data/kmeans_k40_clusters.json`
+- DBSCAN (eps=0.3) cluster assignments, including the noise bucket (cluster `-1`):
+  `runtime/bfcl_live_multiple_data/dbscan_eps0.3_clusters.json`

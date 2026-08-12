@@ -3,6 +3,8 @@
     "cluster": 26,
     "n_tasks": 122,
     "n_distinct_gt_tools": 97,
+    "coherence_ratio": 0.7950819672131147,
+    "coherence": "incoherent",
     "top_tools": [
       "multiply",
       "add",
@@ -144,6 +146,8 @@
     "cluster": 8,
     "n_tasks": 62,
     "n_distinct_gt_tools": 3,
+    "coherence_ratio": 0.04838709677419355,
+    "coherence": "coherent",
     "top_tools": [
       "Media_3_FindMovies",
       "Media_3_PlayMovie",
@@ -225,6 +229,8 @@
     "cluster": 2,
     "n_tasks": 60,
     "n_distinct_gt_tools": 4,
+    "coherence_ratio": 0.06666666666666667,
+    "coherence": "coherent",
     "top_tools": [
       "Movies_1_BuyMovieTickets",
       "Movies_1_FindMovies",
@@ -304,6 +310,8 @@
     "cluster": 7,
     "n_tasks": 57,
     "n_distinct_gt_tools": 3,
+    "coherence_ratio": 0.05263157894736842,
+    "coherence": "coherent",
     "top_tools": [
       "Events_3_FindEvents",
       "Events_3_BuyEventTickets",
@@ -380,6 +388,8 @@
     "cluster": 9,
     "n_tasks": 48,
     "n_distinct_gt_tools": 4,
+    "coherence_ratio": 0.08333333333333333,
+    "coherence": "coherent",
     "top_tools": [
       "Restaurants_2_ReserveRestaurant",
       "Restaurants_2_FindRestaurants",
@@ -447,6 +457,8 @@
     "cluster": 30,
     "n_tasks": 47,
     "n_distinct_gt_tools": 4,
+    "coherence_ratio": 0.0851063829787234,
+    "coherence": "coherent",
     "top_tools": [
       "Payment_1_RequestPayment",
       "Payment_1_MakePayment",
@@ -513,6 +525,8 @@
     "cluster": 13,
     "n_tasks": 45,
     "n_distinct_gt_tools": 3,
+    "coherence_ratio": 0.06666666666666667,
+    "coherence": "coherent",
     "top_tools": [
       "Homes_2_FindHomeByArea",
       "Homes_2_ScheduleVisit",
@@ -577,6 +591,8 @@
     "cluster": 25,
     "n_tasks": 38,
     "n_distinct_gt_tools": 3,
+    "coherence_ratio": 0.07894736842105263,
+    "coherence": "coherent",
     "top_tools": [
       "Music_3_PlayMedia",
       "Music_3_LookupMusic",
@@ -633,6 +649,8 @@
     "cluster": 14,
     "n_tasks": 38,
     "n_distinct_gt_tools": 2,
+    "coherence_ratio": 0.05263157894736842,
+    "coherence": "coherent",
     "top_tools": [
       "get_service_providers",
       "view_service_provider_profile"
@@ -687,6 +705,8 @@
     "cluster": 29,
     "n_tasks": 36,
     "n_distinct_gt_tools": 4,
+    "coherence_ratio": 0.1111111111111111,
+    "coherence": "coherent",
     "top_tools": [
       "Hotels_4_ReserveHotel",
       "Hotels_4_SearchHotel",
@@ -742,6 +762,8 @@
     "cluster": 18,
     "n_tasks": 33,
     "n_distinct_gt_tools": 12,
+    "coherence_ratio": 0.36363636363636365,
+    "coherence": "mixed",
     "top_tools": [
       "get_current_weather",
       "add_postgres_server",
@@ -794,6 +816,8 @@
     "cluster": 5,
     "n_tasks": 33,
     "n_distinct_gt_tools": 8,
+    "coherence_ratio": 0.24242424242424243,
+    "coherence": "mixed",
     "top_tools": [
       "add_postgres_server",
       "add_mtnards_server",
@@ -846,6 +870,8 @@
     "cluster": 0,
     "n_tasks": 32,
     "n_distinct_gt_tools": 3,
+    "coherence_ratio": 0.09375,
+    "coherence": "coherent",
     "top_tools": [
       "Flights_4_SearchOnewayFlight",
       "Flights_4_SearchRoundtripFlights",
@@ -897,6 +923,8 @@
     "cluster": 6,
     "n_tasks": 29,
     "n_distinct_gt_tools": 4,
+    "coherence_ratio": 0.13793103448275862,
+    "coherence": "coherent",
     "top_tools": [
       "Alarm_1_GetAlarms",
       "Alarm_1_AddAlarm",
@@ -945,6 +973,8 @@
     "cluster": 27,
     "n_tasks": 27,
     "n_distinct_gt_tools": 3,
+    "coherence_ratio": 0.1111111111111111,
+    "coherence": "coherent",
     "top_tools": [
       "Buses_3_FindBus",
       "Buses_3_BuyBusTicket",
@@ -991,6 +1021,8 @@
     "cluster": 16,
     "n_tasks": 26,
     "n_distinct_gt_tools": 3,
+    "coherence_ratio": 0.11538461538461539,
+    "coherence": "coherent",
     "top_tools": [
       "Flights_4_SearchOnewayFlight",
       "Flights_4_SearchRoundtripFlights",
@@ -1036,6 +1068,8 @@
     "cluster": 32,
     "n_tasks": 25,
     "n_distinct_gt_tools": 2,
+    "coherence_ratio": 0.08,
+    "coherence": "coherent",
     "top_tools": [
       "Hotels_2_BookHouse",
       "Hotels_2_SearchHouse",
@@ -1078,6 +1112,8 @@
     "cluster": 10,
     "n_tasks": 21,
     "n_distinct_gt_tools": 2,
+    "coherence_ratio": 0.09523809523809523,
+    "coherence": "coherent",
     "top_tools": [
       "Services_4_BookAppointment",
       "Services_4_FindProvider",
@@ -1118,6 +1154,8 @@
     "cluster": 1,
     "n_tasks": 21,
     "n_distinct_gt_tools": 1,
+    "coherence_ratio": 0.047619047619047616,
+    "coherence": "coherent",
     "top_tools": [
       "Movies_3_FindMovies",
       "Music_3_PlayMedia",
@@ -1156,6 +1194,8 @@
     "cluster": 23,
     "n_tasks": 17,
     "n_distinct_gt_tools": 5,
+    "coherence_ratio": 0.29411764705882354,
+    "coherence": "mixed",
     "top_tools": [
       "OpenWeatherMap.get_current_weather",
       "ControlAppliance.execute",
@@ -1192,6 +1232,8 @@
     "cluster": 4,
     "n_tasks": 17,
     "n_distinct_gt_tools": 1,
+    "coherence_ratio": 0.058823529411764705,
+    "coherence": "coherent",
     "top_tools": [
       "Buses_3_FindBus",
       "Buses_3_BuyBusTicket",
@@ -1228,6 +1270,8 @@
     "cluster": 33,
     "n_tasks": 16,
     "n_distinct_gt_tools": 8,
+    "coherence_ratio": 0.5,
+    "coherence": "mixed",
     "top_tools": [
       "uber.ride",
       "uber.eat.order",
@@ -1263,6 +1307,8 @@
     "cluster": 11,
     "n_tasks": 16,
     "n_distinct_gt_tools": 5,
+    "coherence_ratio": 0.3125,
+    "coherence": "mixed",
     "top_tools": [
       "set_alarm",
       "set_volume",
@@ -1298,6 +1344,8 @@
     "cluster": 15,
     "n_tasks": 15,
     "n_distinct_gt_tools": 4,
+    "coherence_ratio": 0.26666666666666666,
+    "coherence": "mixed",
     "top_tools": [
       "get_sensor_readings_latest",
       "get_sensor_readings_history_by_interval",
@@ -1331,6 +1379,8 @@
     "cluster": 22,
     "n_tasks": 15,
     "n_distinct_gt_tools": 5,
+    "coherence_ratio": 0.3333333333333333,
+    "coherence": "mixed",
     "top_tools": [
       "get_detail_adriel_project",
       "get_adriel_list_projects",
@@ -1365,6 +1415,8 @@
     "cluster": 21,
     "n_tasks": 15,
     "n_distinct_gt_tools": 2,
+    "coherence_ratio": 0.13333333333333333,
+    "coherence": "coherent",
     "top_tools": [
       "version_api.VersionApi.get_version",
       "project_api.ProjectApi.get_project_by_name_and_version",
@@ -1399,6 +1451,8 @@
     "cluster": 20,
     "n_tasks": 15,
     "n_distinct_gt_tools": 1,
+    "coherence_ratio": 0.06666666666666667,
+    "coherence": "coherent",
     "top_tools": [
       "Media_3_FindMovies",
       "Media_3_PlayMovie",
@@ -1431,6 +1485,8 @@
     "cluster": 19,
     "n_tasks": 14,
     "n_distinct_gt_tools": 4,
+    "coherence_ratio": 0.2857142857142857,
+    "coherence": "mixed",
     "top_tools": [
       "inventory_management",
       "product_search",
@@ -1463,6 +1519,8 @@
     "cluster": 12,
     "n_tasks": 13,
     "n_distinct_gt_tools": 6,
+    "coherence_ratio": 0.46153846153846156,
+    "coherence": "mixed",
     "top_tools": [
       "detail_project",
       "detail_experience_and_education",
@@ -1495,6 +1553,8 @@
     "cluster": 31,
     "n_tasks": 13,
     "n_distinct_gt_tools": 1,
+    "coherence_ratio": 0.07692307692307693,
+    "coherence": "coherent",
     "top_tools": [
       "Events_3_FindEvents",
       "Events_3_BuyEventTickets",
@@ -1526,6 +1586,8 @@
     "cluster": 3,
     "n_tasks": 12,
     "n_distinct_gt_tools": 2,
+    "coherence_ratio": 0.16666666666666666,
+    "coherence": "mixed",
     "top_tools": [
       "Trains_1_GetTrainTickets",
       "Trains_1_FindTrains",
@@ -1557,6 +1619,8 @@
     "cluster": 34,
     "n_tasks": 11,
     "n_distinct_gt_tools": 4,
+    "coherence_ratio": 0.36363636363636365,
+    "coherence": "mixed",
     "top_tools": [
       "analysis_api.AnalysisApi.retrieve_analysis",
       "acl_api.AclApi.retrieve_projects",
@@ -1587,6 +1651,8 @@
     "cluster": 17,
     "n_tasks": 11,
     "n_distinct_gt_tools": 3,
+    "coherence_ratio": 0.2727272727272727,
+    "coherence": "mixed",
     "top_tools": [
       "Trains_1_GetTrainTickets",
       "Trains_1_FindTrains",
@@ -1617,6 +1683,8 @@
     "cluster": 36,
     "n_tasks": 10,
     "n_distinct_gt_tools": 4,
+    "coherence_ratio": 0.4,
+    "coherence": "mixed",
     "top_tools": [
       "stock_price.get",
       "weather.get",
@@ -1645,6 +1713,8 @@
     "cluster": 28,
     "n_tasks": 10,
     "n_distinct_gt_tools": 1,
+    "coherence_ratio": 0.1,
+    "coherence": "coherent",
     "top_tools": [
       "RideSharing_2_GetRide",
       "Travel_1_FindAttractions",
@@ -1672,6 +1742,8 @@
     "cluster": 35,
     "n_tasks": 9,
     "n_distinct_gt_tools": 3,
+    "coherence_ratio": 0.3333333333333333,
+    "coherence": "mixed",
     "top_tools": [
       "CustomDashboardsApi.get_shareable_api_tokens",
       "api_token_api.APITokenApi.get_api_tokens",
@@ -1700,6 +1772,8 @@
     "cluster": 37,
     "n_tasks": 8,
     "n_distinct_gt_tools": 5,
+    "coherence_ratio": 0.625,
+    "coherence": "incoherent",
     "top_tools": [
       "detail_adriel_project",
       "adriel_detail_experience_and_education",
@@ -1727,6 +1801,8 @@
     "cluster": 38,
     "n_tasks": 7,
     "n_distinct_gt_tools": 4,
+    "coherence_ratio": 0.5714285714285714,
+    "coherence": "incoherent",
     "top_tools": [
       "search_engine.query",
       "generate_image",
@@ -1753,6 +1829,8 @@
     "cluster": 24,
     "n_tasks": 5,
     "n_distinct_gt_tools": 2,
+    "coherence_ratio": 0.4,
+    "coherence": "mixed",
     "top_tools": [
       "generate_image_tool",
       "tts_tool",
@@ -1777,6 +1855,8 @@
     "cluster": 39,
     "n_tasks": 3,
     "n_distinct_gt_tools": 2,
+    "coherence_ratio": 0.6666666666666666,
+    "coherence": "incoherent",
     "top_tools": [
       "get_pods",
       "get_services"
