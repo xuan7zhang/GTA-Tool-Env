@@ -73,6 +73,39 @@ Rank of the ground-truth tool within the 40-tool draw (forced-scoring, no
 GT used to build the ranking): 26/30 ranked #1, 3/30 ranked #2, 1/30 ranked
 outside the top 5.
 
+## K sweep: bigger K is not monotonically better
+
+Same 30 tasks, same 40-tool draws (identical scoring, only the top-K cutoff
+and the resulting generation menu differ), `--topk` swept over 5, 10, 20:
+
+| K | `likelihood_topk` accuracy | GT-in-topk (recall) | Failures |
+|---:|---:|---:|---|
+| 5 | **96.7%** (29/30) | 96.7% (29/30) | `live_multiple_105-43-3` (GT not recalled) |
+| 10 | **96.7%** (29/30) | 96.7% (29/30) | `live_multiple_105-43-3` (GT not recalled, same task) |
+| 20 | **90.0%** (27/30) | **100%** (30/30) | `live_multiple_105-43-3`, `live_multiple_280-128-3`, `live_multiple_910-189-0` (all 3 had GT recalled — the model chose wrong despite the correct tool being visible) |
+| 40 (= `catalog_baseline`, no filtering) | 93.3% (28/30) | 100% | `live_multiple_105-43-3`, `live_multiple_280-128-3` |
+
+**K=10 recovers nothing over K=5** — the one miss at K=5
+(`live_multiple_105-43-3`, GT=`dartfx_help`) is not a recall problem at any
+K: the model answers `"help"` instead of `"dartfx_help"` even in
+`catalog_baseline` with all 40 tools visible, so it is a naming/abbreviation
+mismatch (compare the `Trains_1`/`Train_1` typo case study in
+`BFCL_POOL_SUBSET_20260811.md`), not something a larger candidate set can
+fix.
+
+**K=20 is worse than both K=5 and K=10**, despite perfect GT recall — going
+from 10 to 20 candidates adds two new failures on tasks the smaller K values
+answered correctly (`live_multiple_280-128-3`,
+`live_multiple_910-189-0`), both with the correct tool visibly present in
+the menu. This is the same non-monotonic pattern found in the
+cluster-subspace K sweep (`BFCL_TOOL_SPACE_CLUSTERING_20260811.md`: K=5→49%,
+K=14→77%, still below `native_full`'s 100%) — recall and discriminability
+trade off in opposite directions as K grows: too small loses candidates
+outright, too large re-admits enough marginal noise to start confusing the
+model again. In this specific 40-tool/30-task run, K=5–10 was the sweet
+spot; K=20 (half the pool) had already crossed into the "too cluttered"
+regime.
+
 ## The headline finding: this is much easier than the earlier pool experiments, and that gap is itself informative
 
 A **random** draw of 39 distractors from the full 457-tool catalog, plus the
@@ -152,5 +185,7 @@ size.
 ## Artifacts
 
 - Code: `experiments/bfcl_token_likelihood/catalog_baseline_experiment.py`
-- Raw results (n=30): `runtime/bfcl_catalog_baseline_20260811/results.jsonl`
+- Raw results, K=5 (n=30): `runtime/bfcl_catalog_baseline_20260811/results.jsonl`
+- Raw results, K=10 (n=30, same 40-tool draws): `runtime/bfcl_catalog_baseline_20260811/results_k10.jsonl`
+- Raw results, K=20 (n=30, same 40-tool draws): `runtime/bfcl_catalog_baseline_20260811/results_k20.jsonl`
 - Smoke-test results (n=15, same method, kept for reference): `runtime/bfcl_catalog_baseline_smoke/results.jsonl`
