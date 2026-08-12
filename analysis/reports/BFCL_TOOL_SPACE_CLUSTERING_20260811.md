@@ -306,12 +306,65 @@ same tasks.** Diagnosis, not just the headline number:
 **Takeaway**: clustering by tool-space similarity is a valid, useful
 *diagnostic* (it correctly recovers real business domains, see the tables
 above) — but "cache the union of a domain's historical correct answers" is
-not a good way to build a cheap offline candidate-selection system. A
-follow-up worth trying instead of abandoning the idea: apply the *already-
-validated* online forced-scoring ranking to the cache's contents too (rank
-the cluster's cached tools against the new task's query, keep only the
-top-K) rather than showing the whole undifferentiated cache — this has not
-been tried.
+not a good way to build a cheap offline candidate-selection system.
+
+## Follow-up tested: ranking the cache with likelihood instead of using it raw — still loses
+
+The suggested fix above (rank a cluster's tools with the already-validated
+forced-scoring method, instead of showing the raw union of historical
+answers) was tried. Implementation: `experiments/bfcl_token_likelihood/cluster_subspace_experiment.py`.
+
+**Exact settings.** Cluster 19 (DBSCAN, the largest coherent cluster — 268
+tasks, 24-tool native pool, 14 distinct ground-truth tools), first 100 tasks
+by list order. For every task, every one of the cluster's 24 tools is
+forced-scored against that task's own query (same method as every other
+experiment: `echo=True, max_tokens=0, logprobs=20`, mean per-token logprob
+over the name span). Each tool's score is then **leave-one-out averaged**
+across all *other* tasks in the cluster (task T's own scoring contribution
+is excluded from the ranking T is evaluated against — not a ground-truth
+leak either way, since forced-scoring never touches GT, but keeps the
+subspace a genuine "built from the rest of the domain" object rather than
+partly built from the task being scored). Top-`K` of that ranking becomes
+**one shared subspace for the whole cluster** (nearly identical across all
+100 tasks, since only one row differs in the leave-one-out average).
+Real generation, `temperature=0.0, stop=["\n"], max_tokens=24`, compared
+against `native_full` (the task's own small BFCL-provided candidate list,
+mean size 3.28 in this cluster).
+
+| K | GT-in-subspace | `likelihood_subspace` accuracy | `native_full` accuracy (same 100 tasks) |
+|---:|---:|---:|---:|
+| 5 | 49% | 49.0% | 100% |
+| 14 (= cluster's full distinct-GT-tool count) | 100% | 77.0% | 100% |
+
+**K=5 fails on recall**: the cluster has ≥6 distinct ground-truth tools
+represented in these 100 tasks (`Events_3_FindEvents` 35×, `Movies_3_FindMovies`
+26×, `Services_4_FindProvider` 18×, `Restaurants_2_FindRestaurants` 8×,
+`Services_1_FindProvider` 7×, `RentalCars_3_GetCarsAvailable` 6×) — a
+5-slot shared subspace structurally cannot hold more than 5 of them, so
+whichever ones don't make the cut auto-fail regardless of query content
+(confirmed: 100% accuracy on the 49 tasks where GT *was* in the subspace,
+0% on the other 51 — the entire loss is missing candidates, not the model
+choosing wrong).
+
+**K=14 fixes recall (100%) but still loses to `native_full` by 23 points**:
+once the subspace is large enough to hold every answer the cluster ever
+needs, the loss shifts to confusability — the subspace is now full of
+same-domain, genuinely similar tools (`Hotels_2_BookHouse` vs. `Hotels_2_SearchHouse`
+vs. `Hotels_4_ReserveHotel` vs. `Hotels_4_SearchHotel`, etc.), harder for the
+model to discriminate between than BFCL's own per-task-curated 3–4-tool list.
+
+**Revised takeaway**: raising K from the cluster-cache experiment's
+"everything, uncapped" down to a filtered top-K doesn't fix the core
+problem — **sharing one subspace across an entire cluster is the wrong
+grain**, independent of how that subspace is built (raw union or
+likelihood-ranked) or how large it is. A cluster with more distinct
+ground-truth tools than the chosen K structurally cannot recover them all;
+a cluster with few enough tools to fit still bundles domain-confusable
+options together in a way per-task native curation avoids. The per-task
+online forced-scoring method validated in the pool-subset experiment
+(93.2% accuracy) remains the only approach in this investigation that
+beats the naive baseline — because it re-ranks candidates **per query**,
+not per domain.
 
 ## Caveats
 
@@ -351,3 +404,6 @@ been tried.
   `runtime/bfcl_live_multiple_data/dbscan_eps0.3_clusters.json`
 - Cluster-cache accuracy test code: `experiments/bfcl_token_likelihood/cluster_cache_experiment.py`
 - Cluster-cache raw per-task results (n=1052, 0 errors): `runtime/bfcl_cluster_cache_20260811/results.jsonl`
+- Likelihood-ranked cluster-subspace test code: `experiments/bfcl_token_likelihood/cluster_subspace_experiment.py`
+- Cluster-subspace raw results (cluster 19, n=100 each): `runtime/bfcl_cluster_subspace_20260811/{cluster19_results.jsonl,cluster19_k14_results.jsonl}`
+- Catalog-scale baseline (full 457-tool catalog, random draws): see `analysis/reports/BFCL_CATALOG_BASELINE_20260811.md`
