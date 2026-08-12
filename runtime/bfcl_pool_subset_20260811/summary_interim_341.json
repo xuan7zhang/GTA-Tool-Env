@@ -1,0 +1,41 @@
+{
+  "n_tasks": 352,
+  "pool_size_mean": 23.392045454545453,
+  "pool_size_min": 15,
+  "pool_size_max": 33,
+  "full": {
+    "n": 352,
+    "accuracy": 0.8494318181818182,
+    "gt_in_menu_rate": 1.0,
+    "accuracy_given_gt_in_menu": 0.8494318181818182,
+    "mean_menu_size": 23.392045454545453
+  },
+  "topk": {
+    "n": 352,
+    "accuracy": 0.9289772727272727,
+    "gt_in_menu_rate": 0.96875,
+    "accuracy_given_gt_in_menu": 0.9589442815249267,
+    "mean_menu_size": 5
+  },
+  "randomk": {
+    "n": 352,
+    "accuracy": 0.002840909090909091,
+    "gt_in_menu_rate": 0.011363636363636364,
+    "accuracy_given_gt_in_menu": 0.25,
+    "mean_menu_size": 5
+  },
+  "by_pool_size": {
+    "mid_pool_15_30": {
+      "n_tasks": 345,
+      "full_accuracy": 0.8521739130434782,
+      "topk_accuracy": 0.927536231884058,
+      "randomk_accuracy": 0.002898550724637681
+    },
+    "large_pool_ge30": {
+      "n_tasks": 7,
+      "full_accuracy": 0.7142857142857143,
+      "topk_accuracy": 1.0,
+      "randomk_accuracy": 0.0
+    }
+  }
+}
