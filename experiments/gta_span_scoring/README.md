@@ -99,3 +99,51 @@ preconditions were checked on.
   study that established that identity pays on GTA only once the menu contains
   actively misleading tools and the mask is small (oracle 16.50 vs a
   size-matched random 11.76 vs full 11.73).
+
+---
+
+## Outcome (run on a second machine, 3 greedy replicates, 65 read_arith tasks)
+
+**Gate 1 passed.** Under the span-restricted score `Calculator` moves from rank
+5 (+0.05, whole-answer mean) to rank 2 (+1.128). The text-volume diagnosis was
+correct: the whole-answer mean was distorted by how much text a tool injects,
+and restricting the span removes that specific distortion.
+
+**Gate 2 failed, so the result is null.**
+
+| arm | replicates | mean |
+|---|---|---|
+| span-LOTS top-2 | 4.62 / 3.08 / 3.08 | 3.59% |
+| full menu | 6.15 / 4.62 / 7.69 | 6.15% |
+| size-matched random top-2 | 4.62 / 6.15 / 3.08 | 4.62% |
+| oracle | 18.46 / 23.08 / 16.92 | **19.49%** |
+
+Gold recall of the new ranking: top-2 35.51% micro / 33.85% macro; top-4 81.88%
+micro / 86.15% macro.
+
+Read the effect sizes before the signs: one point is 0.65 tasks here, so the
+three non-oracle arms sit within a task of each other and none of them is
+distinguishable. What is not in doubt is the gap they all fail to close, the
+oracle's 19.49% against a 6.15% full menu.
+
+### A protocol error this exposed, present from the start
+
+The span top-2 is `GoogleSearch + Calculator`, and `OCR` — gold in 65 of 66
+tasks — falls outside it, which is why top-2 recall is only 35.5%. The machine
+has no SERPER key, so the arm attempted GoogleSearch 44 times across three runs
+and got errors; the arm effectively ran one working tool and one error source.
+
+This is not a bad run to be discarded. It is a design fault in this study on
+both machines: **the candidate set contained a tool the deployment cannot
+execute.** The original protocol masked `GoogleSearch` and `MathOCR` through the
+proxy for every arm, while the cached outputs used to compute the marginals
+still contained real GoogleSearch results — whose text is full of prices, which
+a span-restricted score weights heavily. The selector was free to spend a slot
+on a tool it could never use.
+
+Restricting the candidate set to executable tools is a correction, not a knob:
+it removes an option that was never deployable. It must be declared before the
+rerun and reported whichever way it comes out, and it does not retract this
+null unless it changes the outcome. Given top-4 recall is already 81.88%, the
+informative rerun is top-4 against a size-matched random 4, not another attempt
+at top-2.
