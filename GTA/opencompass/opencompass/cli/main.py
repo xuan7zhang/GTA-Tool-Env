@@ -247,10 +247,22 @@ def main():
     # dump config
     output_config_path = osp.join(cfg.work_dir, 'configs',
                                   f'{cfg_time_str}.py')
-    cfg.dump(output_config_path)
-    # Config is intentally reloaded here to avoid initialized
-    # types cannot be serialized
-    cfg = Config.fromfile(output_config_path, format_python_code=False)
+    try:
+        cfg.dump(output_config_path)
+    except SyntaxError:
+        # Environment-driven configs can contain live class objects when
+        # loaded with modern MMEngine in non-lazy mode.  They are valid build
+        # targets but cannot be rendered as Python source by YAPF.  Debug mode
+        # executes tasks in-process, so retain the already-loaded Config.
+        if not args.debug:
+            raise
+        logger.warning('Config contains non-serializable live types; '
+                       'continuing in debug mode without a dumped config.')
+    else:
+        # Config is intentally reloaded here to avoid initialized
+        # types cannot be serialized
+        cfg = Config.fromfile(
+            output_config_path, lazy_import=False, format_python_code=False)
 
     # report to lark bot if specify --lark
     if not args.lark:

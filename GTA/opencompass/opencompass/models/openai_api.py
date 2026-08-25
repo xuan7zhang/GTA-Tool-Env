@@ -13,6 +13,7 @@ from opencompass.registry import MODELS
 from opencompass.utils.prompt import PromptList
 
 from .base_api import BaseAPIModel
+from .token_metrics import TokenMetricsLogger
 
 PromptType = Union[PromptList, str]
 OPENAI_API_BASE = 'https://api.openai.com/v1/chat/completions'
@@ -67,6 +68,9 @@ class OpenAI(BaseAPIModel):
                  openai_api_base: str = OPENAI_API_BASE,
                  mode: str = 'none',
                  temperature: Optional[float] = None,
+                 token_metrics_log: Optional[str] = None,
+                 logprob_top_k: int = 20,
+                 logprob_vocab_size: Optional[int] = None,
                  **gen_params):
 
         super().__init__(path=path,
@@ -100,6 +104,24 @@ class OpenAI(BaseAPIModel):
         self.org_ctr = 0
         self.url = openai_api_base
         self.path = path
+        self.token_metrics = (
+            TokenMetricsLogger(token_metrics_log,
+                               top_k=logprob_top_k,
+                               vocab_size=logprob_vocab_size)
+            if token_metrics_log else None)
+
+    def set_task_id(self, task_id) -> None:
+        if self.token_metrics:
+            self.token_metrics.set_task_id(task_id)
+
+    def set_token_metric_tool_names(self, tool_names) -> None:
+        if self.token_metrics:
+            self.token_metrics.set_tool_names(tool_names)
+
+    def _record_token_metrics(self, choice: dict, text: str) -> str:
+        if self.token_metrics:
+            self.token_metrics.log(choice, text)
+        return text
 
     def generate(
         self,
@@ -233,6 +255,9 @@ class OpenAI(BaseAPIModel):
                     temperature=temperature,
                 )
                 data = {**data, **self.gen_params}
+                if self.token_metrics:
+                    data['logprobs'] = True
+                    data['top_logprobs'] = self.token_metrics.top_k
                 raw_response = requests.post(self.url,
                                              headers=header,
                                              data=json.dumps(data))
@@ -252,7 +277,8 @@ class OpenAI(BaseAPIModel):
                 content = message.get('content')
 
                 if isinstance(content, str):
-                    return content.strip()
+                    return self._record_token_metrics(choice0,
+                                                      content.strip())
 
                 # Some OpenAI-compatible backends return `content=None` for
                 # tool calls or provide text in alternative fields.
@@ -272,7 +298,8 @@ class OpenAI(BaseAPIModel):
                                 arguments = ''
                             else:
                                 arguments = str(arguments)
-                            return f'Tool: {name}\nTool Input: {arguments}'
+                            text = f'Tool: {name}\nTool Input: {arguments}'
+                            return self._record_token_metrics(choice0, text)
 
                     function_call = message.get('function_call')
                     if isinstance(function_call, dict) and function_call:
@@ -285,22 +312,27 @@ class OpenAI(BaseAPIModel):
                             arguments = ''
                         else:
                             arguments = str(arguments)
-                        return f'Tool: {name}\nTool Input: {arguments}'
+                        text = f'Tool: {name}\nTool Input: {arguments}'
+                        return self._record_token_metrics(choice0, text)
 
                     for key in ('reasoning_content', 'reasoning', 'analysis',
                                 'text'):
                         alt = message.get(key)
                         if isinstance(alt, str) and alt.strip():
-                            return alt.strip()
+                            return self._record_token_metrics(
+                                choice0, alt.strip())
 
                     alt_text = choice0.get('text')
                     if isinstance(alt_text, str) and alt_text.strip():
-                        return alt_text.strip()
-                    return ''
+                        return self._record_token_metrics(
+                            choice0, alt_text.strip())
+                    return self._record_token_metrics(choice0, '')
 
                 if isinstance(content, (dict, list)):
-                    return json.dumps(content, ensure_ascii=False).strip()
-                return str(content).strip()
+                    text = json.dumps(content, ensure_ascii=False).strip()
+                    return self._record_token_metrics(choice0, text)
+                return self._record_token_metrics(choice0,
+                                                  str(content).strip())
             except KeyError:
                 if 'error' in response:
                     if response['error']['code'] == 'rate_limit_exceeded':
@@ -383,4 +415,3 @@ class OpenAI(BaseAPIModel):
         elif self.mode == 'rear':
             prompt = sep.join(words[:l])
         return prompt
-

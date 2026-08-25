@@ -92,7 +92,13 @@ class LocalRunner(BaseRunner):
                 mmengine.mkdir_or_exist('tmp/')
                 param_file = f'tmp/{os.getpid()}_params.py'
                 try:
-                    task.cfg.dump(param_file)
+                    try:
+                        task.cfg.dump(param_file)
+                    except SyntaxError:
+                        # A non-lazy Config may legitimately retain class
+                        # objects. Debug execution below is in-process and
+                        # does not need a serialized parameter file.
+                        param_file = None
                     # if use torchrun, restrict it behaves the same as non
                     # debug mode, otherwise, the torchrun will use all the
                     # available resources which might cause inconsistent
@@ -102,12 +108,13 @@ class LocalRunner(BaseRunner):
                                              f'total {len(all_gpu_ids)} '
                                              'available GPUs in debug mode.')
                     tmpl = get_command_template(all_gpu_ids[:num_gpus])
-                    cmd = task.get_command(cfg_path=param_file, template=tmpl)
+                    cmd = (task.get_command(cfg_path=param_file, template=tmpl)
+                           if param_file else 'python in-process')
                     # run in subprocess if starts with torchrun etc.
                     if 'python3 ' in cmd or 'python ' in cmd:
                         # If it is an infer type task do not reload if
                         # the current model has already been loaded.
-                        if 'infer' in self.task_cfg.type.lower():
+                        if 'infer' in str(self.task_cfg.type).lower():
                             # If a model instance already exists,
                             # do not reload it.
                             if hasattr(self, 'cur_model'):
@@ -120,7 +127,8 @@ class LocalRunner(BaseRunner):
                     else:
                         subprocess.run(cmd, shell=True, text=True)
                 finally:
-                    os.remove(param_file)
+                    if param_file and os.path.exists(param_file):
+                        os.remove(param_file)
                 status.append((task_name, 0))
         else:
             if len(all_gpu_ids) > 0:

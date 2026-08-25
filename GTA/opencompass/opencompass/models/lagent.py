@@ -267,6 +267,8 @@ class LagentAgent:
         from lagent import BaseAgent, ActionExecutor
         agent_cfg['action_executor'] = ActionExecutor(tools.values())
         self.agent: BaseAgent = REGISTRY.build(agent_cfg)
+        if hasattr(self.agent._llm, 'set_token_metric_tool_names'):
+            self.agent._llm.set_token_metric_tool_names(tools.keys())
 
     def reset(self):
         pass
@@ -275,6 +277,8 @@ class LagentAgent:
         """Tag every remote tool call with the current sample index so the
         tool-server proxy can log (task_id, turn, tool, mode) per call."""
         self._task_id = task_id
+        if hasattr(self.agent._llm, 'set_task_id'):
+            self.agent._llm.set_task_id(task_id)
         for tool in self._remote_tools:
             tool.headers = {**(tool.headers or {}), 'X-GTA-Task-Id': str(task_id)}
 

@@ -79,7 +79,12 @@ def get_config_from_arg(args) -> Config:
     """
     logger = get_logger()
     if args.config:
-        config = Config.fromfile(args.config, format_python_code=False)
+        # Environment-driven configs (for example gta_atomic_env.py) execute
+        # os.getenv while being loaded.  Newer MMEngine releases may
+        # incorrectly infer lazy-import mode from their import statements,
+        # turning ``os`` into a LazyObject and making getenv fail at runtime.
+        config = Config.fromfile(
+            args.config, lazy_import=False, format_python_code=False)
         config = try_fill_in_custom_cfgs(config)
         # set infer accelerator if needed
         if args.accelerator in ['vllm', 'lmdeploy']:

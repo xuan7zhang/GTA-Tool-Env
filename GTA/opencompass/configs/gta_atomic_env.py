@@ -10,9 +10,13 @@ Everything a sweep varies comes from env vars, so one config file serves all
   GTA_TOOLMETA     toolmeta.json path — use envgen variants for masked/rewritten envs
   GTA_EVAL_MODES   comma list of {step,end}           (default both)
   GTA_MAX_TURN     ReAct max turns                    (default 10)
+  GTA_TOKEN_METRICS_LOG  optional JSONL path for sampled-token logprobs
+  GTA_LOGPROB_TOP_K      returned alternatives/token  (default 20)
+  GTA_LOGPROB_VOCAB_SIZE optional vocab size for entropy upper bound
 
 Metrics: step -> InstAcc/ToolAcc/ArgAcc/SummAcc; end -> AnsAcc + P/O/L/C F1.
 """
+import json
 import os
 
 from lagent.agents import ReAct
@@ -35,6 +39,11 @@ _reader_cfg = dict(
     test_split='test')
 
 _modes = os.getenv('GTA_EVAL_MODES', 'step,end').split(',')
+_stop = os.getenv('GTA_STOP', '["\\nResponse:", "<|im_end|>"]')
+try:
+    _stop = json.loads(_stop)
+except json.JSONDecodeError:
+    pass
 
 datasets = []
 if 'step' in _modes:
@@ -79,7 +88,12 @@ models = [
             query_per_second=int(os.getenv('GTA_QPS', '2')),
             max_seq_len=int(os.getenv('GTA_MAX_SEQ_LEN', '32768')),
             retry=5,
-            stop='<|im_end|>',
+            stop=_stop,
+            token_metrics_log=os.getenv('GTA_TOKEN_METRICS_LOG') or None,
+            logprob_top_k=int(os.getenv('GTA_LOGPROB_TOP_K', '20')),
+            logprob_vocab_size=(
+                int(os.getenv('GTA_LOGPROB_VOCAB_SIZE'))
+                if os.getenv('GTA_LOGPROB_VOCAB_SIZE') else None),
         ),
         tool_server=os.getenv('GTA_TOOLSERVER', 'http://127.0.0.1:16281'),
         tool_meta=os.getenv('GTA_TOOLMETA', 'data/gta_dataset/toolmeta.json'),
@@ -103,4 +117,6 @@ eval = dict(
 # OpenCompass re-dumps this config; a bare module in the namespace serializes
 # as `os=<module ...>` and breaks re-parsing. Drop it after use.
 _modes = None
+_stop = None
+del json
 del os
